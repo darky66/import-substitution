@@ -1,0 +1,57 @@
+{% extends "main/layout.html" %}
+
+{% block title %}
+    Главная страница
+{% endblock  %}
+
+{% block content %}
+    <div class="container">
+        <aside class="sidebar">
+            <h2 class="filters">Фильтры:</h2>
+            <div class="filter-group">
+                <div class="filter-block">
+                    <div class="filter-title">Назначение:</div>
+                    <label><input type="radio" name="purpose"> редактор текста</label>
+                    <label><input type="radio" name="purpose"> бухгалтерия</label>
+                    <label><input type="radio" name="purpose"> общение</label>
+                    <label><input type="radio" name="purpose"> работа</label>
+                    <label><input type="radio" name="purpose"> развлечения</label>
+                </div>
+                <div class="filter-block">
+                    <div class="filter-title">Цена:</div>
+                    <label><input type="radio" name="price"> бесплатно</label>
+                    <label><input type="radio" name="price"> дорого</label>
+                </div>
+                <div class="filter-block">
+                    <div class="filter-title">Устройство:</div>
+                    <label><input type="radio" name="device"> телефон</label>
+                    <label><input type="radio" name="device"> пк</label>
+                </div>
+                <div class="filter-block">
+                    <div class="filter-title">Доступность:</div>
+                    <label><input type="radio" name="access"> скачал и запустил</label>
+                    <label><input type="radio" name="access"> надо разобраться</label>
+                    <label><input type="radio" name="access"> 3 высших</label>
+                </div>
+            </div>
+        </aside>
+        <main class="main">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input class="search" type="text" placeholder="Найти программу..."> <!--  !!!   -->
+            </form>
+            <h1>Результаты поиска:</h1>
+            {{ qwe }}
+        </main>
+        <aside class="recommendations">
+            <h2>Рекомендации:</h2>
+            <div class="rec-item">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/75/Max_logo_2025.png" alt="Поиск" class="rec-icon">
+                <span>- лучший отечественный месенджер</span>
+            </div>
+        </aside>
+    </div>
+
+    
+{% endblock  %}

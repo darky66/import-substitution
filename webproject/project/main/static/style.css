@@ -1,0 +1,157 @@
+body {
+    margin: 0;
+    background: #3f3a3a;
+    font-family: Roboto, "Segoe UI", Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    gap: 30px;
+    padding: 30px 30px;
+    background: #3f3a3a;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.sidebar,
+.main,
+.recommendations {
+    background: #ffffff86;
+    border-radius: 32px;
+    padding: 30px 30px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar {
+    width: 330px;
+    min-width: 220px;
+    gap: 11px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.filter-block {
+    background: #6E6E6E;
+    border-radius: 30px;
+    padding: 20px 0 20px 20px;
+    margin-bottom: 0;
+}
+
+.filter-title {
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.sidebar h2 {
+    color: #4B4B4B;
+    font-size: 30px;
+    margin: 0 0 0 0;
+}
+
+label {
+    display: block;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #fff;
+}
+
+input[type="radio"] {
+    margin-top: 0;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #d9d9d9;
+    border: none;
+    display: inline-block;
+    vertical-align: middle;
+    box-shadow: none;
+    outline: none;
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+    position: relative;
+}
+
+input[type="radio"]:checked::before {
+    content: '';
+    display: block;
+    width: 14px;
+    height: 14px;
+    background: #616161;
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+}
+
+.main {
+    flex: 1 1 0;
+    min-width: 350px;
+    align-items: flex-start;
+    gap: 17px;
+}
+
+.search {
+    width: 100%;
+    font-size: 25px;
+    font-weight: bold;
+    border-radius: 39px;
+    border: none;
+    background: #6E6E6E;
+    color: #fff;
+    padding: 16px 24px 16px 34px;
+    margin-bottom: 0px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.search::placeholder {
+    color: #fff;
+    opacity: 1;
+}
+
+.main h1 {
+    font-size: 30px;
+    font-weight: bold;
+    margin: 0;
+    color: #444;
+}
+
+.recommendations {
+    width: 490px;
+    min-width: 320px;
+    gap: 14px;
+    font-size: 35px;
+}
+
+.recommendations h2 {
+    font-size: 35px;
+    margin: 0 0 0 0;
+    color: #4B4B4B;
+}
+
+.rec-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #4B4B4B;
+}
+
+.rec-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 16px;
+    background: #fff;
+    object-fit: cover;
+    box-shadow: 0 2px 8px #8884;
+}
