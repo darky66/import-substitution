@@ -1,4 +1,4 @@
-from pandas import pd
+import pandas as pd
 
-db = pd.read_csv('Таблица.csv')
-dict = db.to_dict()
+db = pd.read_csv('main/123.csv',  lineterminator='\n')
+print(db.head())

@@ -1,4 +1,4 @@
 from django import forms
 
 class ContactForm(forms.Form):
-    app = forms.CharField()
+    name = forms.CharField(max_length=100, required=False)
