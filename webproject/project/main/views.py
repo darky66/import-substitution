@@ -9,7 +9,7 @@ def main_page(request):
             form = ContactForm(request.POST)
             request_result = request.POST.get('name')
             if request_result in dict_apps.keys():
-                result = dict_apps[result]
+                result = dict_apps[request_result]
             else:
                 result = ['К сожалению, мы не можем найти похожие приложения']
             if form.is_valid():
