@@ -39,10 +39,14 @@
             <form method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <input class="search" type="text" placeholder="Найти программу..."> <!--  !!!   -->
+                <input class="search" name = 'name' type="text" placeholder="Найти программу..."> <!--  !!!   -->
             </form>
             <h1>Результаты поиска:</h1>
-            {{ qwe }}
+            {% for i in result %}
+                <div class = 'alert alert-warning'>
+                    <h2>{{ i }}</h2>
+                </div>
+            {% endfor%}
         </main>
         <aside class="recommendations">
             <h2>Рекомендации:</h2>
