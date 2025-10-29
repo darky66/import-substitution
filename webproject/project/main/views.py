@@ -7,7 +7,7 @@ from .data import dict_apps
 def main_page(request):
     if request.method == 'POST':
             form = ContactForm(request.POST)
-            request_result = request.POST.get('name')
+            request_result = request.POST.get('name').lower()
             if request_result in dict_apps.keys():
                 result = dict_apps[request_result]
             else:
