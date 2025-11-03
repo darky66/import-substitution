@@ -52,52 +52,80 @@
     </aside>
     <script>
         (function() {
-        // Список для хранения избранных объектов
-        const favoritesDictionary = {};
-        
-        function toggleFavorite(btn) {
-            const pressed = btn.getAttribute('aria-pressed') === 'true';
-            const newState = !pressed;
-            const itemname = btn.getAttribute('data-item-name') || 'default';
-            
-            btn.setAttribute('aria-pressed', String(newState));
-            btn.classList.toggle('active', newState);
-            
-            if (newState) {
-                favoritesDictionary[itemname] = 1
-            } else {
-                if (favoritesDictionary[itemname]) {
-                    delete favoritesDictionary[itemname];
+            const storageKey = 'favoritesDictionary';
+            function loadFavorites() {
+                try {
+                    const saved = localStorage.getItem(storageKey);
+                    return saved ? JSON.parse(saved) : [];
+                } catch (e) {
+                    console.error('Ошибка загрузки избранного:', e);
+                    return [];
                 }
             }
             
-            console.log('Текущие избранные:', favoritesDictionary);
-        }
-        document.addEventListener('click', function(e) {
-            const btn = e.target.closest && e.target.closest('.favorite-btn');
-            if (!btn) return;
-            toggleFavorite(btn);
-        });
+            function saveFavorites(dict) {
+                try {
+                    localStorage.setItem(storageKey, JSON.stringify(dict));
+                } catch (e) {
+                    console.error('Ошибка сохранения избранного:', e);
+                }
+            }
+            
+            // Загружаем сохраненные избранные при запуске
+            const favoritesDictionary = loadFavorites();
+            
+            // Восстанавливаем состояние кнопок при загрузке страницы
+            document.addEventListener('DOMContentLoaded', function() {
+                Object.values(favoritesDictionary).forEach(item => {
+                    const btn = document.querySelector(`[data-item-name="${item.id}"]`);
+                    if (btn) {
+                        btn.setAttribute('aria-pressed', 'true');
+                        btn.classList.add('active');
+                    }
+                });
+                console.log('Восстановлены избранные:', favoritesDictionary);
+            });
+            function toggleFavorite(btn) {
+                const pressed = btn.getAttribute('aria-pressed') === 'true';
+                const newState = !pressed;
+                const itemname = btn.getAttribute('data-item-name') || 'default';
+                
+                btn.setAttribute('aria-pressed', String(newState));
+                btn.classList.toggle('active', newState);
+                
+                if (newState) {
+                    favoritesDictionary[itemname] = 1
+                } else {
+                    if (favoritesDictionary[itemname]) {
+                        delete favoritesDictionary[itemname];
+                    }
+                }
+                saveFavorites(favoritesDictionary);
+                console.log('Текущие избранные:', favoritesDictionary);
+            }
+            document.addEventListener('click', function(e) {
+                const btn = e.target.closest && e.target.closest('.favorite-btn');
+                if (!btn) return;
+                toggleFavorite(btn);
+            });
 
-        document.addEventListener('keydown', function(e) {
-            if (e.key === ' ' || e.key === 'Enter') {
-                const active = document.activeElement;
-                if (active && active.classList && active.classList.contains('favorite-btn')) {
-                    e.preventDefault();
-                    toggleFavorite(active);
+            document.addEventListener('keydown', function(e) {
+                if (e.key === ' ' || e.key === 'Enter') {
+                    const active = document.activeElement;
+                    if (active && active.classList && active.classList.contains('favorite-btn')) {
+                        e.preventDefault();
+                        toggleFavorite(active);
+                    }
                 }
-            }
-        });
-        
-        // Функция для получения всех избранных элементов
-        window.getFavorites = function() {
-            return [...favoritesDictionary]; // возвращаем копию массива
-        };
-        
-        // Функция для проверки, есть ли элемент в избранном
-        window.isFavorite = function(itemId) {
-            return favoritesDictionary.some(item => item.id === itemId);
-        };
+            });
+            
+            // Функция для получения всех избранных элементов
+            window.getFavorites = function() {
+                return [...favoritesDictionary]; // возвращаем копию массива
+            };
+            /* for (const key in favoritesDictionary) {  
+                delete favoritesDictionary[key];  
+            } */
     })();
     </script>
 </div>
