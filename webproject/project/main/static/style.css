@@ -168,45 +168,28 @@ input[type="radio"]:checked::before {
 }
 
 .favorite-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.15s ease, color 0.15s ease;
-    color: #cfcfcf;
-    /* цвет незакрашенной звезды */
-    font-size: 22px;
-    line-height: 1;
-    -webkit-tap-highlight-color: transparent;
+    position: absolute;
+    right: 12px;
+    top: 12px;
 }
 
 .favorite-btn::before {
     content: '☆';
-    font-size: 22px;
-    color: inherit;
-    display: block;
-    transition: transform 0.15s ease, color 0.15s ease;
 }
 
 .favorite-btn.active,
 .favorite-btn[aria-pressed="true"] {
     color: #ffd54f;
-    /* цвет заполненной звезды */
-    transform: scale(1.03);
+    /* жёлтый */
+    transform: scale(1.05);
 }
 
 .favorite-btn.active::before,
 .favorite-btn[aria-pressed="true"]::before {
     content: '★';
-    color: inherit;
 }
 
 .favorite-btn:focus {
     outline: 2px solid rgba(255, 213, 79, 0.18);
-    outline-offset: 4px;
+    outline-offset: 3px;
 }

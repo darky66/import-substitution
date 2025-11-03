@@ -39,7 +39,7 @@
         {% for i in result %}
         <div class="alert alert-warning">
 
-            <h2 class="output"><button class="favorite-btn">★</button>{{i}}</h2>
+            <h2 class="output"><button class="favorite-btn" aria-pressed="false" aria-label="Добавить в избранное"></button>{{i}}</h2>
         </div>
         {% endfor%}
     </main>
@@ -50,6 +50,33 @@
             <span>- лучший отечественный месенджер</span>
         </div>
     </aside>
+    <script>
+        // Тоггл для кнопки избранное: переключаем aria-pressed и класс .active
+        (function() {
+            function toggleFavorite(btn) {
+                const pressed = btn.getAttribute('aria-pressed') === 'true';
+                btn.setAttribute('aria-pressed', String(!pressed));
+                btn.classList.toggle('active', !pressed);
+            }
+
+            document.addEventListener('click', function(e) {
+                const btn = e.target.closest && e.target.closest('.favorite-btn');
+                if (!btn) return;
+                toggleFavorite(btn);
+            });
+
+            // поддержка клавиатуры: Enter / Space
+            document.addEventListener('keydown', function(e) {
+                if (e.key === ' ' || e.key === 'Enter') {
+                    const active = document.activeElement;
+                    if (active && active.classList && active.classList.contains('favorite-btn')) {
+                        e.preventDefault();
+                        toggleFavorite(active);
+                    }
+                }
+            });
+        })();
+    </script>
 </div>
 
 
