@@ -38,8 +38,12 @@
         <h1>Результаты поиска:</h1>
         {% for i in result %}
         <div class="alert alert-warning">
-
-            <h2 class="output"><button class="favorite-btn" aria-pressed="false" data-item-name = {{i}} aria-label="Добавить в избранное"></button>{{i}}</h2>
+            {% if i != 'К сожалению, мы не можем найти похожие приложения' %}
+                <h2 class="output"><button class="favorite-btn" aria-pressed="false" data-item-name = {{i}} aria-label="Добавить в избранное"></button>{{i}}</h2>
+            {% endif %}  
+            {% if i == 'К сожалению, мы не можем найти похожие приложения' %}
+                <h2 class="output">{{i}}</h2>
+            {% endif %}
         </div>
         {% endfor%}
     </main>
@@ -119,9 +123,8 @@
                 }
             });
             
-            // Функция для получения всех избранных элементов
             window.getFavorites = function() {
-                return [...favoritesDictionary]; // возвращаем копию массива
+                return [...favoritesDictionary];
             };
             /* for (const key in favoritesDictionary) {  
                 delete favoritesDictionary[key];  

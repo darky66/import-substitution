@@ -3,14 +3,12 @@ import pandas as pd
 from django.core.exceptions import ValidationError
 
 class Import(models.Model):
-    name = models.CharField('Иностранное ПО', max_length = 50)    
-    name_import = models.CharField('Российский аналог', max_length = 100)
-    specific = models.TextField('Характеристики')
+    specific = models.TextField('Избранное')
     
     def __str__(self):
-        return self.name
+        return self.specific
     class Meta:
-        verbose_name = 'Приложение'
-        verbose_name_plural = 'Приложения'
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
     
 
