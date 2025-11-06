@@ -27,23 +27,23 @@
                 <label><input type="radio" name="access"> надо разобраться</label>
                 <label><input type="radio" name="access"> 3 высших</label>
             </div>
-            <button class="abort"><p class="star">★</p> Избранное</button>
+            <a href = "{% url 'favourites' %}" class="abort"><p class="star">★</p> Избранное</a>
         </div>
     </aside>
     <main class="main">
         <form method="post">
             {% csrf_token %} {{ form.as_p }}
             <input class="search" name='name' type="text" placeholder="Найти программу...">
-            <!--  !!!   -->
         </form>
         <h1>Результаты поиска:</h1>
-        {% for i in result %}
+        {% for name, desc in items %}
         <div class="alert alert-warning">
-            {% if i != 'К сожалению, мы не можем найти похожие приложения' %}
-                <h2 class="output"><button class="favorite-btn" aria-pressed="false" data-item-name = {{i}} aria-label="Добавить в избранное"></button>{{i}}</h2>
+            {% if name != 'К сожалению, мы не можем найти похожие приложения' %}
+                <h2 class="output"><button class="favorite-btn" aria-pressed="false" data-item-name = {{ name }} aria-label="Добавить в избранное"></button>{{ name }}</h2>
+                <h2 class="output"> {{ desc }} </h2>
             {% endif %}  
-            {% if i == 'К сожалению, мы не можем найти похожие приложения' %}
-                <h2 class="output">{{i}}</h2>
+            {% if name == 'К сожалению, мы не можем найти похожие приложения' %}
+                <h2 class="output">{{ 'К сожалению, мы не можем найти похожие приложения' }}</h2>
             {% endif %}
         </div>
         {% endfor%}
