@@ -203,3 +203,18 @@ input[type="radio"]:checked::before {
     outline: 2px solid rgba(255, 213, 79, 0.18);
     outline-offset: 3px;
 }
+.abort {
+    background: #6E6E6E;
+    border-radius: 30px;
+    padding: 9px 18px 9px 18px;
+    margin-bottom: 0;
+    border: 0px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #FFFFFF;
+}
+.star{
+    color: #ffd54f;
+    margin: 0 0 0 0;
+    display: inline;
+}
