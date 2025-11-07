@@ -18,18 +18,12 @@ def main_page(request):
             print(result)
             if form.is_valid():
                 name1 = form.cleaned_data['name']
-                '''result_with_descriptions = [
-                    (name, description.get(name, '')) 
-                    for name in result 
-                    if name != 'К сожалению, мы не можем найти похожие приложения'
-                ]'''
                 result_with_descriptions = []
                 for name in result:
                     if name != 'К сожалению, мы не можем найти похожие приложения':
                         result_with_descriptions.append((name, description.get(name, '')))
                     else:
                         result_with_descriptions.append(('К сожалению, мы не можем найти похожие приложения', ''))
-                print(result_with_descriptions)
                 return render(request, 'main/main_page.html', {'items': result_with_descriptions})
             else:
                 return render(request, 'main/main_page.html', { 'result': result })
@@ -39,4 +33,4 @@ def main_page(request):
 
 @requires_csrf_token
 def favourites(request):
-    return render(request, 'main/favourites.html')
+    return render(request, 'main/favourites.html', {'dict': dict_fav})

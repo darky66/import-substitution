@@ -39,8 +39,18 @@
         {% for name, desc in items %}
         <div class="alert alert-warning">
             {% if name != 'К сожалению, мы не можем найти похожие приложения' %}
-                <h2 class="output"><button class="favorite-btn" aria-pressed="false" data-item-name = {{ name }} aria-label="Добавить в избранное"></button>{{ name }}</h2>
-                <h2 class="output"> {{ desc }} </h2>
+                <h2 class="output"><button class="favorite-btn" aria-pressed="false" data-item-name = {{ name }} aria-label="Добавить в избранное"></button>{{ name }} 
+                    {% for i in desc %}
+                        {% if 'http' not in i and i != '-'%}
+                            <br>{{ i }}
+                        {% endif %}
+                        {% if 'http' in i%}
+                            <br>Ссылка на скачивание: <a href = {{ i }}> {{ i }}</a>
+                        {% endif %}
+                        {% if i == '-'%}
+                            <br>Ссылка на скачивание: {{ i }}
+                        {% endif %}
+                    {% endfor %}</h2>
             {% endif %}  
             {% if name == 'К сожалению, мы не можем найти похожие приложения' %}
                 <h2 class="output">{{ 'К сожалению, мы не можем найти похожие приложения' }}</h2>
@@ -58,79 +68,79 @@
     <script>
         (function() {
             const storageKey = 'favoritesDictionary';
+            
             function loadFavorites() {
                 try {
                     const saved = localStorage.getItem(storageKey);
-                    return saved ? JSON.parse(saved) : [];
+                    if (saved) {
+                        const parsed = JSON.parse(saved);
+                        return parsed && typeof parsed === 'object' ? parsed : {};
+                    }
                 } catch (e) {
-                    console.error('Ошибка загрузки избранного:', e);
-                    return [];
+                    console.error('Ошибка загрузки:', e);
                 }
+                return {};
             }
             
             function saveFavorites(dict) {
-                try {
+                //if (dict && typeof dict === 'object') {
                     localStorage.setItem(storageKey, JSON.stringify(dict));
-                } catch (e) {
-                    console.error('Ошибка сохранения избранного:', e);
-                }
+                //}
             }
             
-            // Загружаем сохраненные избранные при запуске
-            const favoritesDictionary = loadFavorites();
+            let favoritesDictionary = loadFavorites();
+            if (!favoritesDictionary || Array.isArray(favoritesDictionary)) {
+                favoritesDictionary = {};
+            }
             
-            // Восстанавливаем состояние кнопок при загрузке страницы
+            console.log('Initial state:', favoritesDictionary);
+            
             document.addEventListener('DOMContentLoaded', function() {
-                Object.values(favoritesDictionary).forEach(item => {
-                    const btn = document.querySelector(`[data-item-name="${item.id}"]`);
+                Object.keys(favoritesDictionary).forEach(item => {
+                    const btn = document.querySelector(`[data-item-name="${item}"]`);
                     if (btn) {
                         btn.setAttribute('aria-pressed', 'true');
                         btn.classList.add('active');
                     }
                 });
-                console.log('Восстановлены избранные:', favoritesDictionary);
-            });
-            function toggleFavorite(btn) {
-                const pressed = btn.getAttribute('aria-pressed') === 'true';
-                const newState = !pressed;
-                const itemname = btn.getAttribute('data-item-name') || 'default';
-                
-                btn.setAttribute('aria-pressed', String(newState));
-                btn.classList.toggle('active', newState);
-                
-                if (newState) {
-                    favoritesDictionary[itemname] = 1
-                } else {
-                    if (favoritesDictionary[itemname]) {
-                        delete favoritesDictionary[itemname];
-                    }
-                }
-                saveFavorites(favoritesDictionary);
-                console.log('Текущие избранные:', favoritesDictionary);
-            }
-            document.addEventListener('click', function(e) {
-                const btn = e.target.closest && e.target.closest('.favorite-btn');
-                if (!btn) return;
-                toggleFavorite(btn);
-            });
-
-            document.addEventListener('keydown', function(e) {
-                if (e.key === ' ' || e.key === 'Enter') {
-                    const active = document.activeElement;
-                    if (active && active.classList && active.classList.contains('favorite-btn')) {
-                        e.preventDefault();
-                        toggleFavorite(active);
-                    }
-                }
             });
             
-            window.getFavorites = function() {
-                return [...favoritesDictionary];
-            };
-            /* for (const key in favoritesDictionary) {  
-                delete favoritesDictionary[key];  
-            } */
-    })();
+            function toggleFavorite(btn) {
+                const itemname = btn.getAttribute('data-item-name');
+                const isPressed = btn.getAttribute('aria-pressed') === 'true';
+                
+                if (isPressed) {
+                    delete favoritesDictionary[itemname];
+                    btn.setAttribute('aria-pressed', 'false');
+                    btn.classList.remove('active');
+                } else {
+                    favoritesDictionary[itemname] = 1;
+                    btn.setAttribute('aria-pressed', 'true');
+                    btn.classList.add('active');
+                }
+                console.log(favoritesDictionary)
+                saveFavorites(favoritesDictionary);
+            }
+            function clearFavorites() {
+                Object.keys(favoritesDictionary).forEach(key => {
+                    delete favoritesDictionary[key];
+                });
+                localStorage.removeItem('favoritesDictionary');
+                document.querySelectorAll('.favorite-btn[aria-pressed="true"]').forEach(btn => {
+                    btn.setAttribute('aria-pressed', 'false');
+                    btn.classList.remove('active');
+                });
+                
+                console.log('Все избранные очищены');
+                return true;
+            }
+
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.favorite-btn')) {
+                    toggleFavorite(e.target.closest('.favorite-btn'));
+                }
+            });
+        })();
     </script>
 </div>
 
