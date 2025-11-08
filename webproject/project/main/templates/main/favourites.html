@@ -27,14 +27,15 @@
                 <label><input type="radio" name="access"> надо разобраться</label>
                 <label><input type="radio" name="access"> 3 высших</label>
             </div>
-            <a href = "{% url 'favourites' %}" class="abort"><p class="star">★</p> Избранное</a>
         </div>
+        <a href="{% url 'favourites' %}" class="abort">
+            <p class="star">★</p> Избранное</a>
     </aside>
     <main class="main">
         <h1>Избранное:</h1>
-        <div id = "output" ></div>
+        <div id="output"></div>
         <script>
-            document.addEventListener('DOMContentLoaded', function(){
+            document.addEventListener('DOMContentLoaded', function() {
                 const savedData = localStorage.getItem('favoritesDictionary');
                 const output = document.getElementById('output');
                 let html = ``
@@ -45,16 +46,15 @@
                         html += `<h3 class = "output"> ${item}</h3>` //!!!!!!!!!!
                     });
                     console.log(favoritesDictionary)
-            }
-            else {
-                html += `<h3 class = "output"> Избранных пока нет </h3>`
-            }
-            output.innerHTML = html
-        });
+                } else {
+                    html += `<h3 class = "output"> Избранных пока нет </h3>`
+                }
+                output.innerHTML = html
+            });
         </script>
         <button class="btn-clear" onclick="clearDictionary()">🗑️ Очистить словарь</button>
         <script>
-            function clearDictionary(){
+            function clearDictionary() {
                 const savedData = localStorage.getItem('favoritesDictionary');
                 const favoritesDictionary = JSON.parse(savedData);
                 Object.keys(favoritesDictionary).forEach(key => {
@@ -71,7 +71,9 @@
             <img src="https://upload.wikimedia.org/wikipedia/commons/7/75/Max_logo_2025.png" alt="Поиск" class="rec-icon">
             <span>- лучший отечественный месенджер</span>
         </div>
-        <a href = "{% url 'main' %}" class="abort"><p class = "house">🏠︎</p></a>
+        <a href="{% url 'main' %}" class="abort-home">
+            <p class="house">🏠︎</p>
+        </a>
     </aside>
 </div>
 

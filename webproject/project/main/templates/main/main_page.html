@@ -27,8 +27,9 @@
                 <label><input type="radio" name="access"> надо разобраться</label>
                 <label><input type="radio" name="access"> 3 высших</label>
             </div>
-            <a href = "{% url 'favourites' %}" class="abort"><p class="star">★</p> Избранное</a>
         </div>
+        <a href="{% url 'favourites' %}" class="abort">
+            <p class="star">★</p> Избранное</a>
     </aside>
     <main class="main">
         <form method="post">
@@ -39,21 +40,12 @@
         {% for name, desc in items %}
         <div class="alert alert-warning">
             {% if name != 'К сожалению, мы не можем найти похожие приложения' %}
-                <h2 class="output"><button class="favorite-btn" aria-pressed="false" data-item-name = {{ name }} aria-label="Добавить в избранное"></button>{{ name }} 
-                    {% for i in desc %}
-                        {% if 'http' not in i and i != '-'%}
-                            <br>{{ i }}
-                        {% endif %}
-                        {% if 'http' in i%}
-                            <br>Ссылка на скачивание: <a href = {{ i }}> {{ i }}</a>
-                        {% endif %}
-                        {% if i == '-'%}
-                            <br>Ссылка на скачивание: {{ i }}
-                        {% endif %}
-                    {% endfor %}</h2>
-            {% endif %}  
-            {% if name == 'К сожалению, мы не можем найти похожие приложения' %}
-                <h2 class="output">{{ 'К сожалению, мы не можем найти похожие приложения' }}</h2>
+            <h2 class="output"><button class="favorite-btn" aria-pressed="false" data-item-name={ { name }} aria-label="Добавить в избранное"></button>{{ name }} {% for i in desc %} {% if 'http' not in i and i != '-'%}
+                <br>{{ i }} {% endif %} {% if 'http' in i%}
+                <br>Ссылка на скачивание: <a href={ { i }}> {{ i }}</a> {% endif %} {% if i == '-'%}
+                <br>Ссылка на скачивание: {{ i }} {% endif %} {% endfor %}</h2>
+            {% endif %} {% if name == 'К сожалению, мы не можем найти похожие приложения' %}
+            <h2 class="output">{{ 'К сожалению, мы не можем найти похожие приложения' }}</h2>
             {% endif %}
         </div>
         {% endfor%}
@@ -68,7 +60,7 @@
     <script>
         (function() {
             const storageKey = 'favoritesDictionary';
-            
+
             function loadFavorites() {
                 try {
                     const saved = localStorage.getItem(storageKey);
@@ -81,20 +73,20 @@
                 }
                 return {};
             }
-            
+
             function saveFavorites(dict) {
                 //if (dict && typeof dict === 'object') {
-                    localStorage.setItem(storageKey, JSON.stringify(dict));
+                localStorage.setItem(storageKey, JSON.stringify(dict));
                 //}
             }
-            
+
             let favoritesDictionary = loadFavorites();
             if (!favoritesDictionary || Array.isArray(favoritesDictionary)) {
                 favoritesDictionary = {};
             }
-            
+
             console.log('Initial state:', favoritesDictionary);
-            
+
             document.addEventListener('DOMContentLoaded', function() {
                 Object.keys(favoritesDictionary).forEach(item => {
                     const btn = document.querySelector(`[data-item-name="${item}"]`);
@@ -104,11 +96,11 @@
                     }
                 });
             });
-            
+
             function toggleFavorite(btn) {
                 const itemname = btn.getAttribute('data-item-name');
                 const isPressed = btn.getAttribute('aria-pressed') === 'true';
-                
+
                 if (isPressed) {
                     delete favoritesDictionary[itemname];
                     btn.setAttribute('aria-pressed', 'false');
@@ -121,6 +113,7 @@
                 console.log(favoritesDictionary)
                 saveFavorites(favoritesDictionary);
             }
+
             function clearFavorites() {
                 Object.keys(favoritesDictionary).forEach(key => {
                     delete favoritesDictionary[key];
@@ -130,7 +123,7 @@
                     btn.setAttribute('aria-pressed', 'false');
                     btn.classList.remove('active');
                 });
-                
+
                 console.log('Все избранные очищены');
                 return true;
             }
