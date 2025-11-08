@@ -42,7 +42,7 @@
             {% if name != 'К сожалению, мы не можем найти похожие приложения' %}
             <h2 class="output"><button class="favorite-btn" aria-pressed="false" data-item-name={{ name }} aria-label="Добавить в избранное"></button>{{ name }} {% for i in desc %} {% if 'http' not in i and i != '-'%}
                 <br>{{ i }} {% endif %} {% if 'http' in i%}
-                <br>Ссылка на скачивание: <a href={{ i }}> {{ i }}</a> {% endif %} {% if i == '-'%}
+                <br>Ссылка на скачивание: <a href={{ i }} target="_blank"> {{ i }}</a> {% endif %} {% if i == '-'%}
                 <br>Ссылка на скачивание: {{ i }} {% endif %} {% endfor %}</h2>
             {% endif %} {% if name == 'К сожалению, мы не можем найти похожие приложения' %}
             <h2 class="output">{{ 'К сожалению, мы не можем найти похожие приложения' }}</h2>
