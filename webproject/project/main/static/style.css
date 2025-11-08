@@ -147,15 +147,16 @@ input[type="radio"]:checked::before {
     font-weight: bold;
     color: #4B4B4B;
     margin-bottom: auto;
+    flex-direction: column;
 }
 
 .rec-icon {
-    width: 54px;
-    height: 54px;
-    border-radius: 16px;
-    background: #fff;
-    object-fit: cover;
-    box-shadow: 0 2px 8px #8884;
+    max-height: 54px;
+    min-height: 54px;
+    min-width: 54px;
+    background: none;
+    object-fit: fill;
+    margin-right: 10px;
 }
 
 .output {
@@ -257,4 +258,14 @@ input[type="radio"]:checked::before {
     display: inline;
     text-decoration: none;
     text-align: center;
+}
+
+.rec-text {
+    text-align: center;
+    align-items: center;
+    display: flex;
+    width: 100%;
+    text-decoration: none;
+    color: #4B4B4B;
+    margin-bottom: 5px;
 }
