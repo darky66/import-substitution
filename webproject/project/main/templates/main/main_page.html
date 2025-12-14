@@ -1,226 +1,202 @@
-{% extends "main/layout.html" %} {% block title %}Главная страница{% endblock %} {% block content %}
+{% extends "main/layout.html" %}
 
-<header class="site-header">
-    <div class="header-inner">
-        <div class="logo">SoftGuide</div>
-        <nav class="top-nav">
-            <a href="/" class="nav-link">Главная</a>
-            <a href="{% url 'favourites' %}" class="nav-link">Избранное ★</a>
-        </nav>
-        <div class="burger">☰</div>
-    </div>
-</header>
+{% block title %}Поиск приложений{% endblock %}
 
+{% block content %}
 <div class="container">
-    <!-- SIDEBAR -->
+    <!-- SIDEBAR с фильтрами -->
     <aside class="sidebar">
-        <h2 class="filters">Фильтры:</h2>
-
-        <!-- Theme toggle -->
-        <div class="theme-toggle-block">
-            <span>Тема:</span>
-            <button id="themeToggle" class="theme-toggle-btn" aria-label="Переключить тему">🌙</button>
-        </div>
-
+        <h2 class="filters">Фильтры</h2>
         <div class="filter-group">
             <div class="filter-block">
-                <div class="filter-title">Назначение:</div>
-                <div class="chip-group">
-                    <label><input type="radio" name="purpose" value="editor"><span>редактор текста</span></label>
-                    <label><input type="radio" name="purpose" value="accounting"><span>бухгалтерия</span></label>
-                    <label><input type="radio" name="purpose" value="chat"><span>общение</span></label>
-                    <label><input type="radio" name="purpose" value="work"><span>работа</span></label>
-                    <label><input type="radio" name="purpose" value="fun"><span>развлечения</span></label>
-                </div>
+                <span class="filter-title">Назначение</span>
+                <label><input type="radio" name="purpose"> Рабочие приложения</label>
+                <label><input type="radio" name="purpose"> Развлечение</label>
+                <label><input type="radio" name="purpose"> Медиа</label>
+                <label><input type="radio" name="purpose"> Утилиты</label>
+                <label><input type="radio" name="purpose"> Образование</label>
             </div>
 
             <div class="filter-block">
-                <div class="filter-title">Цена:</div>
-                <div class="chip-group">
-                    <label><input type="radio" name="price" value="free"><span>бесплатно</span></label>
-                    <label><input type="radio" name="price" value="expensive"><span>дорого</span></label>
-                </div>
+                <span class="filter-title">Цена</span>
+                <label><input type="radio" name="price"> Бесплатные</label>
+                <label><input type="radio" name="price"> Платные</label>
             </div>
 
             <div class="filter-block">
-                <div class="filter-title">Устройство:</div>
-                <div class="chip-group">
-                    <label><input type="radio" name="device" value="phone"><span>телефон</span></label>
-                    <label><input type="radio" name="device" value="pc"><span>пк</span></label>
-                </div>
+                <span class="filter-title">Устройство</span>
+                <label><input type="radio" name="device"> Windows</label>
+                <label><input type="radio" name="device"> macOS</label>
             </div>
 
             <div class="filter-block">
-                <div class="filter-title">Доступность:</div>
-                <div class="chip-group">
-                    <label><input type="radio" name="access" value="easy"><span>скачал и запустил</span></label>
-                    <label><input type="radio" name="access" value="medium"><span>надо разобраться</span></label>
-                    <label><input type="radio" name="access" value="hard"><span>3 высших</span></label>
-                </div>
+                <span class="filter-title">Доступ</span>
+                <label><input type="radio" name="access"> Desktop</label>
+                <label><input type="radio" name="access"> Web</label>
+                <label><input type="radio" name="access"> Mobile</label>
             </div>
         </div>
 
         <a href="{% url 'favourites' %}" class="abort">
-            <p class="star">★</p> Избранное</a>
+            <span class="starp">★</span> Избранное
+        </a>
     </aside>
 
-    <!-- MAIN -->
+    <!-- MAIN CONTENT -->
     <main class="main">
-        <form method="post">
-            {% csrf_token %} {{ form.as_p }}
-            <input class="search" name="name" type="text" placeholder="Найти программу...">
+        <form method="POST">
+            {% csrf_token %}
+            <input class="search" name="name" type="text" placeholder="Найти приложение...">
         </form>
 
-        <h1>Результаты поиска:</h1>
+        <h1>Результаты поиска</h1>
 
-        {% for name, desc in items %} {% if name != 'К сожалению, мы не можем найти похожие приложения' %}
-        <div class="result-card">
-            <button class="favorite-btn" aria-pressed="false" data-item-name="{{ name }}" aria-label="Добавить в избранное">☆</button>
-            <div class="result-card-title">{{ name }}</div>
-            <div class="result-card-desc">
-                {% for i in desc %} {% if 'http' not in i and i != '-' %} {{ i }}<br> {% endif %} {% endfor %}
-            </div>
-            <div class="result-card-actions">
-                {% for i in desc %} {% if 'http' in i %}
-                <a href="{{ i }}" target="_blank" rel="noopener">Скачать</a> {% endif %} {% endfor %}
-            </div>
+        <div id="output">
+            {% for name, desc in items %}
+                {% if name != 'К сожалению, мы не можем найти похожие приложения' %}
+                    <div class="output">
+                        <div>
+                            <h2>{{ name }}</h2>
+                            {% for i in desc %}
+                                {% if 'http' not in i and i != '-' %}
+                                    <h3>{{ i }}</h3>
+                                {% endif %}
+                                {% if 'http' in i %}
+                                    <a href="{{ i }}" target="_blank" rel="noopener noreferrer">{{ i }}</a>
+                                {% endif %}
+                                {% if i == '-' %}
+                                    <br>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <button class="favorite-btn" data-item-name="{{ name }}" aria-label="Добавить в избранное" aria-pressed="false"></button>
+                    </div>
+                {% endif %}
+                {% if name == 'К сожалению, мы не можем найти похожие приложения' %}
+                    <div class="alert alert-warning">
+                        К сожалению, мы не можем найти похожие приложения
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
-        {% else %}
-        <div class="result-card">
-            <div class="result-card-title">К сожалению, мы не можем найти похожие приложения</div>
-        </div>
-        {% endif %} {% endfor %}
     </main>
 
     <!-- RECOMMENDATIONS -->
     <aside class="recommendations">
-        <h2>Рекомендации:</h2>
+        <h2>Рекомендуемые</h2>
         <div class="rec-item">
-            <a class="rec-text" href="https://max.ru/" target="_blank" rel="noopener"><img src="https://upload.wikimedia.org/wikipedia/commons/7/75/Max_logo_2025.png" class="rec-icon" alt="MAX"> - месенджер</a>
-            <a class="rec-text" href="https://dzen.ru" target="_blank" rel="noopener"><img src="https://upload.wikimedia.org/wikipedia/commons/5/58/Yandex_icon.svg" class="rec-icon" alt="Yandex"> - поисковик</a>
-            <a class="rec-text" href="https://elma365.com/ru/" target="_blank" rel="noopener"><img src="https://softline.ru/upload/iblock/276/qldcbie6vmyo7mtnsqr74j95rpxl97nn/elma_color_1024.png" class="rec-icon" alt="ELMA"> - документооборот</a>
-            <a class="rec-text" href="https://1c.ru/" target="_blank" rel="noopener"><img src="https://upload.wikimedia.org/wikipedia/commons/9/93/1C_Company_logo.svg" class="rec-icon" alt="1C"> - все для предпринимателей</a>
-            <a class="rec-text" href="https://www.kaspersky.ru/" target="_blank" rel="noopener"><img src="https://upload.wikimedia.org/wikipedia/commons/2/25/Kaspersky_logo.svg" class="rec-icon" alt="Kaspersky"> - антивирус</a>
-            <a class="rec-text" href="https://rosa.ru/r7-office/" target="_blank" rel="noopener"><img src="https://www.irisoft.ru/wp-content/uploads/2022/09/r7o.png" class="rec-icon" alt="R7 Office"> - текстовый редактор</a>
+            <a class="rec-text" href="https://max.ru" target="_blank" rel="noopener noreferrer">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/75/Max-logo-2025.png" alt="MAX" class="rec-icon">
+                MAX
+            </a>
+        </div>
+        <div class="rec-item">
+            <a class="rec-text" href="https://dzen.ru" target="_blank" rel="noopener noreferrer">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/58/Yandex_icon.svg" alt="Дзен" class="rec-icon">
+                Яндекс Дзен
+            </a>
+        </div>
+        <div class="rec-item">
+            <a class="rec-text" href="https://elma365.com/ru" target="_blank" rel="noopener noreferrer">
+                <img src="https://softline.ru/upload/iblock/276/qldcbie6vmyo7mtnsqr74j95rpxl97nnelmacolor1024.png" alt="ELMA" class="rec-icon">
+                ELMA 365
+            </a>
+        </div>
+        <div class="rec-item">
+            <a class="rec-text" href="https://1c.ru" target="_blank" rel="noopener noreferrer">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/1CCompanylogo.svg" alt="1C" class="rec-icon">
+                1C:Предприятие
+            </a>
+        </div>
+        <div class="rec-item">
+            <a class="rec-text" href="https://www.kaspersky.ru" target="_blank" rel="noopener noreferrer">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/25/Kaspersky_logo.svg" alt="Kaspersky" class="rec-icon">
+                Kaspersky
+            </a>
+        </div>
+        <div class="rec-item">
+            <a class="rec-text" href="https://rosa.ru/r7-office" target="_blank" rel="noopener noreferrer">
+                <img src="https://www.irisoft.ru/wp-content/uploads/2022/09/r7o.png" alt="R7-Office" class="rec-icon">
+                R7-Office
+            </a>
         </div>
     </aside>
 </div>
 
-<footer class="site-footer">
-    <div class="footer-inner">
-        <div class="footer-copy">© 2025 SoftGuide — подбор программ</div>
-        <div class="footer-links">
-            <a href="#" class="footer-link">О проекте</a>
-            <a href="#" class="footer-link">Контакты</a>
-        </div>
-    </div>
-</footer>
-
 <script>
-    // === Theme toggle ===
-    (function() {
-        const root = document.documentElement;
-        const btn = document.getElementById("themeToggle");
+    const storageKey = 'favoritesDictionary';
 
-        const saved = localStorage.getItem("theme") || "dark";
-        root.setAttribute("data-theme", saved);
-        if (btn) btn.textContent = saved === "light" ? "☀️" : "🌙";
-
-        if (btn) {
-            btn.addEventListener("click", () => {
-                const current = root.getAttribute("data-theme");
-                const next = current === "light" ? "dark" : "light";
-                root.setAttribute("data-theme", next);
-                localStorage.setItem("theme", next);
-                btn.textContent = next === "light" ? "☀️" : "🌙";
-            });
-        }
-    })();
-
-    // === Sticky header on scroll ===
-    window.addEventListener("scroll", () => {
-        const header = document.querySelector('.site-header');
-        if (!header) return;
-        if (window.scrollY > 20) header.classList.add('scrolled');
-        else header.classList.remove('scrolled');
-    });
-
-    // === Mobile burger menu ===
-    (function() {
-        const burger = document.querySelector('.burger');
-        const nav = document.querySelector('.top-nav');
-        if (!burger || !nav) return;
-
-        burger.addEventListener('click', () => {
-            nav.classList.toggle('active');
-            burger.classList.toggle('active');
-        });
-    })();
-
-    // === Favorites (localStorage) ===
-    (function() {
-        const storageKey = 'favoritesDictionary';
-
-        function loadFavorites() {
-            try {
-                const saved = localStorage.getItem(storageKey);
-                if (saved) return JSON.parse(saved) || {};
-            } catch (e) {
-                console.warn('Ошибка при загрузке избранного:', e);
+    function loadFavorites() {
+        try {
+            const saved = localStorage.getItem(storageKey);
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                return typeof parsed === 'object' ? parsed : {};
             }
-            return {};
+        } catch (e) {
+            console.error('Ошибка загрузки избранного:', e);
         }
+        return {};
+    }
 
-        function saveFavorites(dict) {
-            try {
-                localStorage.setItem(storageKey, JSON.stringify(dict));
-            } catch (e) {
-                console.warn('Ошибка при сохранении избранного:', e);
-            }
+    function saveFavorites(dict) {
+        if (dict && typeof dict === 'object') {
+            localStorage.setItem(storageKey, JSON.stringify(dict));
         }
+    }
 
-        let favoritesDictionary = loadFavorites();
-        if (!favoritesDictionary || Array.isArray(favoritesDictionary)) favoritesDictionary = {};
+    let favoritesDictionary = loadFavorites();
 
-        // При загрузке страницы пометим уже добавленные
-        document.addEventListener('DOMContentLoaded', function() {
-            Object.keys(favoritesDictionary).forEach(item => {
-                const btn = document.querySelector(`[data-item-name="${item}"]`);
-                if (btn) {
-                    btn.setAttribute('aria-pressed', 'true');
-                    btn.classList.add('active');
-                    btn.textContent = '★';
-                }
-            });
-        });
+    if (!favoritesDictionary || !Array.isArray(favoritesDictionary)) {
+        favoritesDictionary = {};
+        console.log('Инициализация избранного');
+    }
 
-        function toggleFavorite(btn) {
-            if (!btn) return;
-            const itemname = btn.getAttribute('data-item-name');
-            const isPressed = btn.getAttribute('aria-pressed') === 'true';
-
-            if (isPressed) {
-                delete favoritesDictionary[itemname];
-                btn.setAttribute('aria-pressed', 'false');
-                btn.classList.remove('active');
-                btn.textContent = '☆';
-            } else {
-                favoritesDictionary[itemname] = 1;
+    document.addEventListener('DOMContentLoaded', function() {
+        Object.keys(favoritesDictionary).forEach(item => {
+            const btn = document.querySelector(`[data-item-name="${item}"]`);
+            if (btn) {
                 btn.setAttribute('aria-pressed', 'true');
                 btn.classList.add('active');
-                btn.textContent = '★';
-            }
-            saveFavorites(favoritesDictionary);
-        }
-
-        // Делегируем клик
-        document.addEventListener('click', function(e) {
-            const fav = e.target.closest('.favorite-btn');
-            if (fav) {
-                toggleFavorite(fav);
             }
         });
-    })();
-</script>
+    });
 
+    function toggleFavorite(btn) {
+        const itemName = btn.getAttribute('data-item-name');
+        const isPressed = btn.getAttribute('aria-pressed') === 'true';
+
+        if (isPressed) {
+            delete favoritesDictionary[itemName];
+            btn.setAttribute('aria-pressed', 'false');
+            btn.classList.remove('active');
+        } else {
+            favoritesDictionary[itemName] = 1;
+            btn.setAttribute('aria-pressed', 'true');
+            btn.classList.add('active');
+        }
+
+        console.log('Избранное обновлено:', favoritesDictionary);
+        saveFavorites(favoritesDictionary);
+    }
+
+    function clearFavorites() {
+        Object.keys(favoritesDictionary).forEach(key => {
+            delete favoritesDictionary[key];
+        });
+        localStorage.removeItem(storageKey);
+        document.querySelectorAll('.favorite-btn[aria-pressed="true"]').forEach(btn => {
+            btn.setAttribute('aria-pressed', 'false');
+            btn.classList.remove('active');
+        });
+        console.log('Избранное очищено');
+        return true;
+    }
+
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.favorite-btn')) {
+            toggleFavorite(e.target.closest('.favorite-btn'));
+        }
+    });
+</script>
 {% endblock %}

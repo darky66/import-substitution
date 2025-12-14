@@ -1,161 +1,152 @@
-{% extends "main/layout.html" %} {% block title %} Главная страница {% endblock %} {% block content %}
+{% extends "main/layout.html" %}
+
+{% block title %}Избранное{% endblock %}
+
+{% block content %}
 <div class="container">
+    <!-- SIDEBAR с фильтрами -->
     <aside class="sidebar">
-        <h2 class="filters">Фильтры:</h2>
-
-        <!-- Переключатель темы -->
-        <div class="theme-toggle-block">
-            <span>Тема:</span>
-            <button id="themeToggle" class="theme-toggle-btn" aria-label="Переключить тему">🌙</button>
-        </div>
-
-        <!-- Чипы-фильтры -->
+        <h2 class="filters">Фильтры</h2>
         <div class="filter-group">
-
             <div class="filter-block">
-                <div class="filter-title">Назначение:</div>
-                <div class="chip-group">
-                    <label><input type="radio" name="purpose" value="editor"><span>редактор текста</span></label>
-                    <label><input type="radio" name="purpose" value="accounting"><span>бухгалтерия</span></label>
-                    <label><input type="radio" name="purpose" value="chat"><span>общение</span></label>
-                    <label><input type="radio" name="purpose" value="work"><span>работа</span></label>
-                    <label><input type="radio" name="purpose" value="fun"><span>развлечения</span></label>
-                </div>
+                <span class="filter-title">Назначение</span>
+                <label><input type="radio" name="purpose"> Рабочие приложения</label>
+                <label><input type="radio" name="purpose"> Развлечение</label>
+                <label><input type="radio" name="purpose"> Медиа</label>
+                <label><input type="radio" name="purpose"> Утилиты</label>
+                <label><input type="radio" name="purpose"> Образование</label>
             </div>
 
             <div class="filter-block">
-                <div class="filter-title">Цена:</div>
-                <div class="chip-group">
-                    <label><input type="radio" name="price" value="free"><span>бесплатно</span></label>
-                    <label><input type="radio" name="price" value="expensive"><span>дорого</span></label>
-                </div>
+                <span class="filter-title">Цена</span>
+                <label><input type="radio" name="price"> Бесплатные</label>
+                <label><input type="radio" name="price"> Платные</label>
             </div>
 
             <div class="filter-block">
-                <div class="filter-title">Устройство:</div>
-                <div class="chip-group">
-                    <label><input type="radio" name="device" value="phone"><span>телефон</span></label>
-                    <label><input type="radio" name="device" value="pc"><span>пк</span></label>
-                </div>
+                <span class="filter-title">Устройство</span>
+                <label><input type="radio" name="device"> Windows</label>
+                <label><input type="radio" name="device"> macOS</label>
             </div>
 
             <div class="filter-block">
-                <div class="filter-title">Доступность:</div>
-                <div class="chip-group">
-                    <label><input type="radio" name="access" value="easy"><span>скачал и запустил</span></label>
-                    <label><input type="radio" name="access" value="medium"><span>надо разобраться</span></label>
-                    <label><input type="radio" name="access" value="hard"><span>3 высших</span></label>
-                </div>
+                <span class="filter-title">Доступ</span>
+                <label><input type="radio" name="access"> Desktop</label>
+                <label><input type="radio" name="access"> Web</label>
+                <label><input type="radio" name="access"> Mobile</label>
             </div>
         </div>
 
-        <a href="{% url 'favourites' %}" class="abort">
-            <p class="star">★</p> Избранное</a>
+        <a href="{% url 'main' %}" class="abort">
+            ← Назад на главную
+        </a>
     </aside>
 
+    <!-- MAIN CONTENT -->
     <main class="main">
-        <form method="post">
-            {% csrf_token %} {{ form.as_p }}
-            <input class="search" name='name' type="text" placeholder="Найти программу...">
-        </form>
-
-        <h1>Результаты поиска:</h1>
-
-        {% for name, desc in items %}
-        <div class="alert alert-warning">
-            {% if name != 'К сожалению, мы не можем найти похожие приложения' %}
-            <h2 class="output">
-                <button class="favorite-btn" aria-pressed="false" data-item-name={{ name }} aria-label="Добавить в избранное"></button> {{ name }} {% for i in desc %} {% if 'http' not in i and i != '-' %}
-                <br>{{ i }} {% endif %} {% if 'http' in i %}
-                <br>Ссылка на скачивание: <a href={{ i }} target="_blank">{{ i }}</a> {% endif %} {% if i == '-' %}
-                <br>Ссылка на скачивание: {{ i }} {% endif %} {% endfor %}
-            </h2>
-            {% else %}
-            <h2 class="output">К сожалению, мы не можем найти похожие приложения</h2>
-            {% endif %}
-        </div>
-        {% endfor %}
+        <h1>Мои избранные приложения</h1>
+        <div id="output"></div>
+        <button class="btn-clear" onclick="return clearDictionaryWithConfirm()">Очистить избранное</button>
     </main>
 
+    <!-- RECOMMENDATIONS -->
     <aside class="recommendations">
-        <h2>Рекомендации:</h2>
+        <h2>Рекомендуемые</h2>
         <div class="rec-item">
-            <a class="rec-text" href="https://max.ru/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/7/75/Max_logo_2025.png" class="rec-icon"> - месенджер</a>
-            <a class="rec-text" href="https://dzen.ru" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/5/58/Yandex_icon.svg" class="rec-icon"> - поисковик</a>
-            <a class="rec-text" href="https://elma365.com/ru/" target="_blank"><img src="https://softline.ru/upload/iblock/276/qldcbie6vmyo7mtnsqr74j95rpxl97nn/elma_color_1024.png" class="rec-icon"> - документооборот</a>
-            <a class="rec-text" href="https://1c.ru/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/9/93/1C_Company_logo.svg" class="rec-icon"> - все для предпринимателей</a>
-            <a class="rec-text" href="https://www.kaspersky.ru/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/2/25/Kaspersky_logo.svg" class="rec-icon"> - антивирус</a>
-            <a class="rec-text" href="https://rosa.ru/r7-office/" target="_blank"><img src="https://www.irisoft.ru/wp-content/uploads/2022/09/r7o.png" class="rec-icon"> - текстовый редактор</a>
+            <a class="rec-text" href="https://max.ru" target="_blank" rel="noopener noreferrer">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/75/Max-logo-2025.png" alt="MAX" class="rec-icon">
+                MAX
+            </a>
+        </div>
+        <div class="rec-item">
+            <a class="rec-text" href="https://dzen.ru" target="_blank" rel="noopener noreferrer">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/58/Yandex_icon.svg" alt="Дзен" class="rec-icon">
+                Яндекс Дзен
+            </a>
+        </div>
+        <div class="rec-item">
+            <a class="rec-text" href="https://elma365.com/ru" target="_blank" rel="noopener noreferrer">
+                <img src="https://softline.ru/upload/iblock/276/qldcbie6vmyo7mtnsqr74j95rpxl97nnelmacolor1024.png" alt="ELMA" class="rec-icon">
+                ELMA 365
+            </a>
+        </div>
+        <div class="rec-item">
+            <a class="rec-text" href="https://1c.ru" target="_blank" rel="noopener noreferrer">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/1CCompanylogo.svg" alt="1C" class="rec-icon">
+                1C:Предприятие
+            </a>
+        </div>
+        <div class="rec-item">
+            <a class="rec-text" href="https://www.kaspersky.ru" target="_blank" rel="noopener noreferrer">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/25/Kaspersky_logo.svg" alt="Kaspersky" class="rec-icon">
+                Kaspersky
+            </a>
+        </div>
+        <div class="rec-item">
+            <a class="rec-text" href="https://rosa.ru/r7-office" target="_blank" rel="noopener noreferrer">
+                <img src="https://www.irisoft.ru/wp-content/uploads/2022/09/r7o.png" alt="R7-Office" class="rec-icon">
+                R7-Office
+            </a>
         </div>
     </aside>
-
-    <script>
-        (function() {
-            /* Тема */
-            const root = document.documentElement;
-            const btn = document.getElementById("themeToggle");
-            const saved = localStorage.getItem("theme") || "dark";
-            root.setAttribute("data-theme", saved);
-            btn.textContent = saved === "light" ? "☀️" : "🌙";
-
-            btn.addEventListener("click", () => {
-                const current = root.getAttribute("data-theme");
-                const next = current === "light" ? "dark" : "light";
-                root.setAttribute("data-theme", next);
-                localStorage.setItem("theme", next);
-                btn.textContent = next === "light" ? "☀️" : "🌙";
-            });
-
-            /* Избранное */
-            const storageKey = 'favoritesDictionary';
-
-            function loadFavorites() {
-                try {
-                    const saved = localStorage.getItem(storageKey);
-                    if (saved) return JSON.parse(saved) || {};
-                } catch {}
-                return {};
-            }
-
-            function saveFavorites(dict) {
-                localStorage.setItem(storageKey, JSON.stringify(dict));
-            }
-
-            let favoritesDictionary = loadFavorites();
-            if (!favoritesDictionary || Array.isArray(favoritesDictionary)) favoritesDictionary = {};
-
-            document.addEventListener('DOMContentLoaded', function() {
-                Object.keys(favoritesDictionary).forEach(item => {
-                    const btn = document.querySelector(`[data-item-name="${item}"]`);
-                    if (btn) {
-                        btn.setAttribute('aria-pressed', 'true');
-                        btn.classList.add('active');
-                    }
-                });
-            });
-
-            function toggleFavorite(btn) {
-                const itemname = btn.getAttribute('data-item-name');
-                const isPressed = btn.getAttribute('aria-pressed') === 'true';
-
-                if (isPressed) {
-                    delete favoritesDictionary[itemname];
-                    btn.setAttribute('aria-pressed', 'false');
-                    btn.classList.remove('active');
-                } else {
-                    favoritesDictionary[itemname] = 1;
-                    btn.setAttribute('aria-pressed', 'true');
-                    btn.classList.add('active');
-                }
-                saveFavorites(favoritesDictionary);
-            }
-
-            document.addEventListener('click', function(e) {
-                if (e.target.closest('.favorite-btn')) {
-                    toggleFavorite(e.target.closest('.favorite-btn'));
-                }
-            });
-        })();
-    </script>
 </div>
+
+<script>
+    const storageKey = 'favoritesDictionary';
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const savedData = localStorage.getItem(storageKey);
+        const output = document.getElementById('output');
+        let html = '';
+
+        if (savedData) {
+            try {
+                const favoritesDictionary = JSON.parse(savedData);
+                const keys = Object.keys(favoritesDictionary);
+
+                if (keys.length === 0) {
+                    html = '<div class="alert alert-warning">Избранное пусто. Добавьте приложения на главной странице!</div>';
+                } else {
+                    keys.forEach(item => {
+                        html += `<div class="output"><h3>${item}</h3></div>`;
+                    });
+                }
+
+                console.log('Загруженное избранное:', favoritesDictionary);
+            } catch (e) {
+                console.error('Ошибка при разборе избранного:', e);
+                html = '<div class="alert alert-warning">Ошибка при загрузке избранного</div>';
+            }
+        } else {
+            html = '<div class="alert alert-warning">Избранное пусто. Добавьте приложения на главной странице!</div>';
+        }
+
+        output.innerHTML = html;
+    });
+
+    function clearDictionaryWithConfirm() {
+        if (confirm('Вы уверены, что хотите очистить избранное? Это действие невозможно отменить.')) {
+            clearDictionary();
+            return true;
+        }
+        return false;
+    }
+
+    function clearDictionary() {
+        const savedData = localStorage.getItem(storageKey);
+        if (savedData) {
+            try {
+                const favoritesDictionary = JSON.parse(savedData);
+                Object.keys(favoritesDictionary).forEach(key => {
+                    delete favoritesDictionary[key];
+                });
+                localStorage.removeItem(storageKey);
+                console.log('Избранное успешно очищено');
+                location.reload();
+            } catch (e) {
+                console.error('Ошибка при очистке избранного:', e);
+            }
+        }
+    }
+</script>
 {% endblock %}
