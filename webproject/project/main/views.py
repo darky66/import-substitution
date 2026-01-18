@@ -15,7 +15,6 @@ def main_page(request):
                    description[value] = description.get(value, dict_fav[value])
             else:
                 result = ['К сожалению, мы не можем найти похожие приложения']
-            print(result)
             if form.is_valid():
                 name1 = form.cleaned_data['name']
                 result_with_descriptions = []
