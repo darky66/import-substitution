@@ -616,27 +616,6 @@ select.form-control {
   padding-left: var(--space-16);
 }
 
-@media (min-width: 640px) {
-  .container {
-    max-width: var(--container-sm);
-  }
-}
-@media (min-width: 768px) {
-  .container {
-    max-width: var(--container-md);
-  }
-}
-@media (min-width: 1024px) {
-  .container {
-    max-width: var(--container-lg);
-  }
-}
-@media (min-width: 1280px) {
-  .container {
-    max-width: var(--container-xl);
-  }
-}
-
 /* Utility classes */
 .flex {
   display: flex;
@@ -901,6 +880,10 @@ input[type="radio"]:checked {
 .abort:active {
     transform: translateY(0);
     background: var(--color-primary-active);
+}
+
+.account-button {
+  width: 49%;
 }
 
 .starp {
