@@ -38,7 +38,7 @@ def main_page(request):
 @login_required
 def favourites(request):
     return render(request, 'main/favourites.html', {'dict': dict_fav})
-
+@requires_csrf_token
 def register_view(request):
     form = LoginForm(data=request.POST)
     if request.method == 'POST':
@@ -52,7 +52,7 @@ def register_view(request):
             return redirect('/') 
     return render(request, 'main/login.html', {'form': form})
 
-
+@requires_csrf_token
 def login_view(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -63,8 +63,14 @@ def login_view(request):
     else:
         form = RegisterForm()
     return render(request, 'main/register.html', {'form': form})
-
+@requires_csrf_token
 def logout_page(request):
     logout(request)
     messages.success(request, 'Вы успешно вышли из системы')
     return redirect('login')
+
+def error_404(request, exception):
+    return render(request, 'main/error_404.html', status=404)
+
+def error_500(request):
+    return render(request, 'main/error_505.html', status=500)
