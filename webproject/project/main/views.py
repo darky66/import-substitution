@@ -1,7 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .forms import ContactForm
 from django.views.decorators.csrf import requires_csrf_token
 from .data import dict_apps, dict_fav
+from .forms import RegisterForm, LoginForm
+from django.contrib import messages
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
 
 @requires_csrf_token
 def main_page(request):
@@ -31,5 +35,36 @@ def main_page(request):
     return render(request, 'main/main_page.html')
 
 @requires_csrf_token
+@login_required
 def favourites(request):
     return render(request, 'main/favourites.html', {'dict': dict_fav})
+
+def register_view(request):
+    form = LoginForm(data=request.POST)
+    if request.method == 'POST':
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username, password=password) 
+            print(user)
+            if user is not None:
+                login(request, user)   
+            return redirect('/') 
+    return render(request, 'main/login.html', {'form': form})
+
+
+def login_view(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()         
+            login(request, user)       
+            return redirect('/')    
+    else:
+        form = RegisterForm()
+    return render(request, 'main/register.html', {'form': form})
+
+def logout_page(request):
+    logout(request)
+    messages.success(request, 'Вы успешно вышли из системы')
+    return redirect('login')
