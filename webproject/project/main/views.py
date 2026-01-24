@@ -13,12 +13,23 @@ def main_page(request):
     if request.method == 'POST':
             form = ContactForm(request.POST)
             request_result = request.POST.get('name').lower()
-            if request_result in dict_apps.keys():
-                result = dict_apps[request_result] # result = [0, 1]
-                for value in result:
-                   description[value] = description.get(value, dict_fav[value])
+            if len(request_result.split()) > 1:
+                if request_result in dict_apps.keys():
+                    result = dict_apps[request_result] # result = [0, 1]
+                    for value in result:
+                        description[value] = description.get(value, dict_fav[value])
+                else:
+                    result = ['К сожалению, мы не можем найти похожие приложения']
             else:
-                result = ['К сожалению, мы не можем найти похожие приложения']
+                fl = False
+                for key, value in dict_apps.items():
+                    if request_result in key.split():
+                        fl = True 
+                        result = dict_apps[key]
+                        for value in result:
+                            description[value] = description.get(value, dict_fav[value])
+                if fl == False:
+                    result = ['К сожалению, мы не можем найти похожие приложения']
             if form.is_valid():
                 name1 = form.cleaned_data['name']
                 result_with_descriptions = []
