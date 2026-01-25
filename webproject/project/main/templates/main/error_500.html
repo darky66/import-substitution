@@ -1,7 +1,13 @@
 {% extends "main/layout.html" %}
 
 {% block title %}Ошибка 500{% endblock %}
-{% block content%}
-<h1>Page Not Found (500)</h1>
-<p>The requested page does not exist.</p>
-{% endblock%}
+
+{% block content %}
+<div class="error-container">
+    <div class="error-card">
+        <h1 class="error-title">500</h1>
+        <p class="error-message">Внутренняя ошибка сервера. Попробуйте позже.</p>
+        <a href="{% url 'home' %}" class="error-btn">На главную</a>
+    </div>
+</div>
+{% endblock %}

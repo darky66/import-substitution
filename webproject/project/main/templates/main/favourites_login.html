@@ -1,0 +1,22 @@
+{% extends "main/layout.html" %}
+
+{% block title %}Авторизация{% endblock %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    
+    {% for field in form %}
+        <div class="mb-3">
+            <label for="{{ field.id_for_label }}">
+                {{ field.label }}
+            </label>
+            {{ field }}
+        </div>
+    {% endfor %}
+    <button type="submit">Войти</button>
+    <div class="links-section">
+        <p>Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a></p>
+    </div>
+</form>
+{% endblock %}

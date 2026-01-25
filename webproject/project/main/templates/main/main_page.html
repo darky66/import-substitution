@@ -4,8 +4,8 @@
 
 {% block content %}
 <div class="container">
-    <!-- SIDEBAR с фильтрами -->
-    <aside class="sidebar">
+    <aside class="sidebar desktop-sidebar">
+
         <h2 class="filters">Фильтры</h2>
         <div class="filter-group">
             <div class="filter-block">
@@ -16,42 +16,109 @@
                 <label><input type="radio" name="purpose"> Утилиты</label>
                 <label><input type="radio" name="purpose"> Образование</label>
             </div>
-
             <div class="filter-block">
                 <span class="filter-title">Цена</span>
                 <label><input type="radio" name="price"> Бесплатные</label>
                 <label><input type="radio" name="price"> Платные</label>
             </div>
-
             <div class="filter-block">
                 <span class="filter-title">Устройство</span>
                 <label><input type="radio" name="device"> Windows</label>
-                <label><input type="radio" name="device"> macOS</label>
+                <label><input type="radio" name="device"> MacOS</label>
+                <label><input type="radio" name="device"> Linux</label>
+                <label><input type="radio" name="device"> Android</label>
+                <label><input type="radio" name="device"> IOS</label>
+                <label><input type="radio" name="device"> Web</label>
             </div>
-
-            <div class="filter-block">
-                <span class="filter-title">Доступ</span>
-                <label><input type="radio" name="access"> Desktop</label>
-                <label><input type="radio" name="access"> Web</label>
-                <label><input type="radio" name="access"> Mobile</label>
-            </div>
-        </div>
-
-        <a href="{% url 'favourites' %}" class="abort">
-            <span class="starp">★</span> Избранное
-        </a>
-        <div>        
-            <a href="{% url 'login' %}" class="abort account-button">
-                <span class="starp">𓁷</span> Авторизация
-            </a>
-            <a href="{% url 'register' %}" class="abort account-button">
-                <span class="starp">𓁷</span> Регистрация
-            </a>
         </div>
     </aside>
+    <div class="account-sheet" id="accountSheet">
+        <div class="filters-sheet-content">
+            <div class="filters-sheet-header">
+                <span>Вход</span>
+                <button class="close-sheet" id="closeAccountSheet">✕</button>
+            </div>
 
-    <!-- MAIN CONTENT -->
+            <div class="account-options">
+                <a href="{% url 'register' %}" class="account-option-btn">
+                    Войти
+                </a>
+                <a href="{% url 'login' %}" class="account-option-btn">
+                    Регистрация
+                </a>
+                <a href="{% url 'favourites' %}" class="account-option-btn">
+                    Избранное
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="filters-sheet" id="filtersSheet">
+        <div class="filters-sheet-content">
+            <div class="filters-sheet-header">
+                <span>Фильтры</span>
+                <button class="close-sheet" id="closeFilters">✕</button>
+            </div>
+            <aside class="sidebar mobile-sidebar">
+                <h2 class="filters">Фильтры</h2>
+                <div class="filter-group">
+                    <div class="filter-block">
+                        <span class="filter-title">Назначение</span>
+                        <label><input type="radio" name="purpose"> Рабочие приложения</label>
+                        <label><input type="radio" name="purpose"> Развлечение</label>
+                        <label><input type="radio" name="purpose"> Медиа</label>
+                        <label><input type="radio" name="purpose"> Утилиты</label>
+                        <label><input type="radio" name="purpose"> Образование</label>
+                    </div>
+                    <div class="filter-block">
+                        <span class="filter-title">Цена</span>
+                        <label><input type="radio" name="price"> Бесплатные</label>
+                        <label><input type="radio" name="price"> Платные</label>
+                    </div>
+                    <div class="filter-block">
+                        <span class="filter-title">Устройство</span>
+                        <label><input type="radio" name="device"> Windows</label>
+                        <label><input type="radio" name="device"> MacOS</label>
+                        <label><input type="radio" name="device"> Linux</label>
+                        <label><input type="radio" name="device"> Android</label>
+                        <label><input type="radio" name="device"> IOS</label>
+                        <label><input type="radio" name="device"> Web</label>
+                    </div>
+                    <div class="filters-actions">
+                        <button class="filters-reset" id="resetFilters">
+                            Сбросить
+                        </button>
+                        <button class="filters-apply" id="applyFilters">
+                            Применить
+                        </button>
+                    </div>
+
+                </div>
+            </aside>
+        </div>
+    </div>
     <main class="main">
+        <div class="mobile-actions full-width-actions">
+            <button class="mobile-action-btn full-width-btn" id="mobileThemeToggle" aria-label="Сменить тему">
+                <svg xmlns="http://www.w3.org/2000/svg" class="action-icon" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M12 3a9 9 0 000 18 9 9 0 000-18zm0 16a7 7 0 110-14 7 7 0 010 14z" />
+                </svg>
+                <span>Тема</span>
+            </button>
+            <button class="mobile-action-btn full-width-btn" id="openFilters" aria-label="Фильтры">
+                <svg xmlns="http://www.w3.org/2000/svg" class="action-icon" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M3 5h18v2H3V5zm4 6h10v2H7v-2zm6 6h-4v2h4v-2z" />
+                </svg>
+                <span>Фильтры</span>
+            </button>
+            <button class="mobile-action-btn full-width-btn" id="mobileLoginBtn" aria-label="Аккаунт">
+                <svg xmlns="http://www.w3.org/2000/svg" class="action-icon" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
+                <span>Аккаунт</span>
+        </div>
+
+
         <form method="POST">
             {% csrf_token %}
             <input class="search" name="name" type="text" placeholder="Найти приложение...">
@@ -61,71 +128,75 @@
 
         <div id="output">
             {% for name, desc in items %}
-                {% if name != 'К сожалению, мы не можем найти похожие приложения' %}
-                    <div class="output">
-                        <div>
-                            <h2>{{ name }}</h2>
-                            {% for i in desc %}
-                                {% if 'http' not in i and i != '-' %}
-                                    <h3>{{ i }}</h3>
-                                {% endif %}
-                                {% if 'http' in i %}
-                                    <a href="{{ i }}" target="_blank" rel="noopener noreferrer">{{ i }}</a>
-                                {% endif %}
-                                {% if i == '-' %}
-                                    <br>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                        <button class="favorite-btn" data-item-name="{{ name }}" aria-label="Добавить в избранное" aria-pressed="false"></button>
-                    </div>
-                {% endif %}
-                {% if name == 'К сожалению, мы не можем найти похожие приложения' %}
-                    <div class="alert alert-warning">
-                        К сожалению, мы не можем найти похожие приложения
-                    </div>
-                {% endif %}
+            {% if name != 'К сожалению, мы не можем найти похожие приложения' %}
+            <div class="output">
+                <div>
+                    <h2>{{ name }}</h2>
+                    {% for i in desc %}
+                    {% if 'http' not in i and i != '-' %}
+                    <h3>{{ i }}</h3>
+                    {% endif %}
+                    {% if 'http' in i %}
+                    <a href="{{ i }}" target="_blank" rel="noopener noreferrer">{{ i }}</a>
+                    {% endif %}
+                    {% if i == '-' %}
+                    <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <button class="favorite-btn" data-item-name="{{ name }}" aria-label="Добавить в избранное"
+                    aria-pressed="false"></button>
+            </div>
+            {% endif %}
+            {% if name == 'К сожалению, мы не можем найти похожие приложения' %}
+            <div class="alert alert-warning">
+                К сожалению, мы не можем найти похожие приложения
+            </div>
+            {% endif %}
             {% endfor %}
         </div>
     </main>
 
     <!-- RECOMMENDATIONS -->
     <aside class="recommendations">
+        <button id="theme-toggle" class="abort switchtheme">
+            Переключить тему
+        </button>
+        <a href="{% url 'register' %}" class="abort account-button">
+            Войти
+        </a>
+        <a href="{% url 'login' %}" class="abort account-button">
+            Регистрация
+        </a>
+        <a href="{% url 'favourites' %}" class="abort">
+            <span class="starp">★</span> Избранное
+        </a>
         <h2>Рекомендуемые</h2>
         <div class="rec-item">
             <a class="rec-text" href="https://max.ru" target="_blank" rel="noopener noreferrer">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/7/75/Max-logo-2025.png" alt="MAX" class="rec-icon">
-                MAX
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/75/Max_logo_2025.png" alt="MAX"
+                    class="rec-icon">
+                <div class="rec-title"> - мессенджер</div>
             </a>
         </div>
         <div class="rec-item">
             <a class="rec-text" href="https://dzen.ru" target="_blank" rel="noopener noreferrer">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/5/58/Yandex_icon.svg" alt="Дзен" class="rec-icon">
-                Яндекс Дзен
-            </a>
-        </div>
-        <div class="rec-item">
-            <a class="rec-text" href="https://elma365.com/ru" target="_blank" rel="noopener noreferrer">
-                <img src="https://softline.ru/upload/iblock/276/qldcbie6vmyo7mtnsqr74j95rpxl97nnelmacolor1024.png" alt="ELMA" class="rec-icon">
-                ELMA 365
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/58/Yandex_icon.svg" alt="Яндекс"
+                    class="rec-icon">
+                <div class="rec-title"> - браузер</div>
             </a>
         </div>
         <div class="rec-item">
             <a class="rec-text" href="https://1c.ru" target="_blank" rel="noopener noreferrer">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/1CCompanylogo.svg" alt="1C" class="rec-icon">
-                1C:Предприятие
-            </a>
-        </div>
-        <div class="rec-item">
-            <a class="rec-text" href="https://www.kaspersky.ru" target="_blank" rel="noopener noreferrer">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/2/25/Kaspersky_logo.svg" alt="Kaspersky" class="rec-icon">
-                Kaspersky
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/1C_Company_logo.svg/1280px-1C_Company_logo.svg.png"
+                    alt="1C" class="rec-icon">
+                <div class="rec-title"> - бухгалтерия</div>
             </a>
         </div>
         <div class="rec-item">
             <a class="rec-text" href="https://rosa.ru/r7-office" target="_blank" rel="noopener noreferrer">
                 <img src="https://www.irisoft.ru/wp-content/uploads/2022/09/r7o.png" alt="R7-Office" class="rec-icon">
-                R7-Office
+                <div class="rec-title"> - офисный пакет</div>
             </a>
         </div>
     </aside>
@@ -166,9 +237,9 @@
         console.log('Словарь успешно загружен');
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         console.log('Восстановление кнопок. Ключи:', Object.keys(favoritesDictionary));
-        
+
         Object.keys(favoritesDictionary).forEach(item => {
             const btn = document.querySelector(`[data-item-name="${item}"]`);
             console.log(`Поиск кнопки для "${item}":`, btn);
@@ -201,7 +272,7 @@
 
         console.log('Текущие избранные:', favoritesDictionary);
         saveFavorites(favoritesDictionary);
-        
+
         // Проверка что сохранилось
         setTimeout(() => {
             const saved = localStorage.getItem(storageKey);
@@ -222,10 +293,300 @@
         return true;
     }
 
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         if (e.target.closest('.favorite-btn')) {
             toggleFavorite(e.target.closest('.favorite-btn'));
         }
     });
 </script>
+<script>
+    const themeKey = 'site-theme';
+    const toggleBtn = document.getElementById('theme-toggle');
+
+    function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem(themeKey, theme);
+    }
+
+    function initTheme() {
+        const savedTheme = localStorage.getItem(themeKey);
+        if (savedTheme) {
+            applyTheme(savedTheme);
+        } else {
+            // По умолчанию — системная
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            applyTheme(prefersDark ? 'dark' : 'light');
+        }
+    }
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            applyTheme(current === 'dark' ? 'light' : 'dark');
+        });
+    }
+
+    initTheme();
+</script>
+<script>
+    const openBtn = document.getElementById('openFilters');
+    const closeBtn = document.getElementById('closeFilters');
+    const sheet = document.getElementById('filtersSheet');
+
+    function openSheet() {
+        sheet.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeSheet() {
+        sheet.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    if (openBtn) openBtn.addEventListener('click', openSheet);
+    if (closeBtn) closeBtn.addEventListener('click', closeSheet);
+
+    // Закрытие по клику вне панели
+    sheet.addEventListener('click', (e) => {
+        if (e.target === sheet) {
+            closeSheet();
+        }
+    });
+</script>
+<script>
+    const sheetContent = document.querySelector('.filters-sheet-content');
+
+    let startY = 0;
+    let currentY = 0;
+    let isDragging = false;
+
+    const CLOSE_THRESHOLD = 120; // px — как у iOS
+
+    sheetContent.addEventListener('touchstart', (e) => {
+        if (!sheet.classList.contains('active')) return;
+
+        startY = e.touches[0].clientY;
+        isDragging = true;
+
+        sheetContent.style.transition = 'none';
+    });
+
+    sheetContent.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+
+        currentY = e.touches[0].clientY;
+        const deltaY = currentY - startY;
+
+        // Двигаем ТОЛЬКО вниз
+        if (deltaY > 0) {
+            sheetContent.style.transform = `translateY(${deltaY}px)`;
+        }
+    });
+
+    sheetContent.addEventListener('touchend', () => {
+        if (!isDragging) return;
+        isDragging = false;
+
+        sheetContent.style.transition = 'transform 0.25s cubic-bezier(.4,0,.2,1)';
+
+        const deltaY = currentY - startY;
+
+        if (deltaY > CLOSE_THRESHOLD) {
+            closeSheet();
+        } else {
+            // Возврат обратно
+            sheetContent.style.transform = 'translateY(0)';
+        }
+
+        startY = 0;
+        currentY = 0;
+    });
+</script>
+<script>
+    const applyBtn = document.getElementById('applyFilters');
+    const resetBtn = document.getElementById('resetFilters');
+
+    // Применить фильтры
+    if (applyBtn) {
+        applyBtn.addEventListener('click', () => {
+            // Здесь фильтры УЖЕ выбраны (radio / checkbox)
+            // Можно отправить форму или обновить результаты
+
+            closeSheet(); // iOS-style автозакрытие
+        });
+    }
+
+    // Сбросить фильтры
+    if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+            const inputs = document.querySelectorAll(
+                '.filters-sheet input[type="radio"], .filters-sheet input[type="checkbox"]'
+            );
+
+            inputs.forEach(input => {
+                input.checked = false;
+            });
+        });
+    }
+</script>
+<script>
+    const mobileThemeBtn = document.getElementById('mobileThemeToggle');
+
+    if (mobileThemeBtn) {
+        mobileThemeBtn.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            applyTheme(current === 'dark' ? 'light' : 'dark');
+        });
+    }
+</script>
+<script>
+    const accountSheet = document.getElementById('accountSheet');
+    const mobileLoginBtn = document.getElementById('mobileLoginBtn');
+    const closeAccountBtn = document.getElementById('closeAccountSheet');
+
+    function openAccountSheet() {
+        if (accountSheet) {
+            accountSheet.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeAccountSheetFunc() {
+        if (accountSheet) {
+            accountSheet.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+
+    // Кнопка Войти
+    if (mobileLoginBtn) {
+        mobileLoginBtn.addEventListener('click', (e) => {
+            e.preventDefault(); // отменяем переход, если это <a>
+            openAccountSheet();
+        });
+    }
+
+    // Закрытие
+    if (closeAccountBtn) closeAccountBtn.addEventListener('click', closeAccountSheetFunc);
+
+    // Закрытие по клику вне панели
+    if (accountSheet) {
+        accountSheet.addEventListener('click', e => {
+            if (e.target === accountSheet) closeAccountSheetFunc();
+        });
+    }
+</script>
+<script>
+    const mobileSheet = document.getElementById('mobileSheet');
+    const sheetTitle = document.getElementById('sheetTitle');
+    const sheetBody = document.getElementById('sheetBody');
+    const closeMobileSheet = document.getElementById('closeMobileSheet');
+    // Контент для фильтров
+    const filtersContent = `
+    <div class="filter-group">
+        <div class="filter-block">
+            <span class="filter-title">Назначение</span>
+            <label><input type="radio" name="purpose"> Рабочие приложения</label>
+            <label><input type="radio" name="purpose"> Развлечение</label>
+            <label><input type="radio" name="purpose"> Медиа</label>
+            <label><input type="radio" name="purpose"> Утилиты</label>
+            <label><input type="radio" name="purpose"> Образование</label>
+        </div>
+        <div class="filter-block">
+            <span class="filter-title">Цена</span>
+            <label><input type="radio" name="price"> Бесплатные</label>
+            <label><input type="radio" name="price"> Платные</label>
+        </div>
+        <div class="filter-block">
+            <span class="filter-title">Устройство</span>
+            <label><input type="radio" name="device"> Windows</label>
+            <label><input type="radio" name="device"> macOS</label>
+        </div>
+        <div class="filter-block">
+            <span class="filter-title">Доступ</span>
+            <label><input type="radio" name="access"> Desktop</label>
+            <label><input type="radio" name="access"> Web</label>
+            <label><input type="radio" name="access"> Mobile</label>
+        </div>
+    </div>
+`;
+
+    // Контент для аккаунта
+    const accountContent = `
+    <a href="{% url 'login' %}" class="sheet-btn">Войти</a>
+    <a href="{% url 'register' %}" class="sheet-btn">Регистрация</a>
+`;
+
+    // Открытие
+    function openSheet(type) {
+        if (type === 'filters') {
+            sheetTitle.textContent = 'Фильтры';
+            sheetBody.innerHTML = filtersContent;
+        } else if (type === 'account') {
+            sheetTitle.textContent = 'Вход';
+            sheetBody.innerHTML = accountContent;
+        }
+        mobileSheet.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Закрытие
+    function closeSheet() {
+        mobileSheet.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    closeMobileSheet.addEventListener('click', closeSheet);
+    mobileSheet.addEventListener('click', e => {
+        if (e.target === mobileSheet) closeSheet();
+    });
+
+
+    sheetContent.addEventListener('touchstart', e => {
+        startY = e.touches[0].clientY;
+        isDragging = true;
+        sheetContent.style.transition = 'none';
+    });
+    sheetContent.addEventListener('touchmove', e => {
+        if (!isDragging) return;
+        currentY = e.touches[0].clientY;
+        let deltaY = currentY - startY;
+        if (deltaY > 0) sheetContent.style.transform = `translateY(${deltaY}px)`;
+    });
+    sheetContent.addEventListener('touchend', () => {
+        isDragging = false;
+        sheetContent.style.transition = 'transform 0.25s cubic-bezier(.4,0,.2,1)';
+        let deltaY = currentY - startY;
+        if (deltaY > CLOSE_THRESHOLD) closeSheet();
+        else sheetContent.style.transform = 'translateY(0)';
+    });
+    document.querySelectorAll('.output').forEach((el, index) => {
+        setTimeout(() => el.classList.add('show'), index * 100);
+    });
+    const labels = document.querySelectorAll('.filter-block label');
+
+    labels.forEach(label => {
+        const input = label.querySelector('input');
+        input.addEventListener('change', () => {
+            // Сбрасываем у всех
+            labels.forEach(l => l.classList.remove('active'));
+            if (input.checked) {
+                label.classList.add('active');
+            }
+        });
+    });
+    document.querySelectorAll('.filter-block label').forEach(label => {
+        const input = label.querySelector('input');
+        input.addEventListener('change', () => {
+            // Сбрасываем active у всех label в этой группе
+            const group = label.parentElement;
+            group.querySelectorAll('label').forEach(l => l.classList.remove('active'));
+
+            // Добавляем active выбранному
+            if (input.checked) label.classList.add('active');
+        });
+    });
+
+</script>
+
 {% endblock %}
