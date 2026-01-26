@@ -133,15 +133,15 @@
                 <div>
                     <h2>{{ name }}</h2>
                     {% for i in desc %}
-                    {% if 'http' not in i and i != '-' %}
-                    <h3>{{ i }}</h3>
-                    {% endif %}
-                    {% if 'http' in i %}
-                    <a href="{{ i }}" target="_blank" rel="noopener noreferrer">{{ i }}</a>
-                    {% endif %}
-                    {% if i == '-' %}
-                    <br>
-                    {% endif %}
+                        {% if 'http' not in i and i != '-' %}
+                            <h3>{{ i }}</h3>
+                        {% endif %}
+                        {% if 'http' in i %}
+                            <a href="{{ i }}" target="_blank" rel="noopener noreferrer">{{ i }}</a>
+                        {% endif %}
+                        {% if i == '-' %}
+                            <br>
+                        {% endif %}
                     {% endfor %}
                 </div>
                 <button class="favorite-btn" data-item-name="{{ name }}" aria-label="Добавить в избранное"
@@ -159,18 +159,24 @@
 
     <!-- RECOMMENDATIONS -->
     <aside class="recommendations">
-        <button id="theme-toggle" class="abort switchtheme">
-            Переключить тему
-        </button>
-        <a href="{% url 'register' %}" class="abort account-button">
-            Войти
-        </a>
-        <a href="{% url 'login' %}" class="abort account-button">
-            Регистрация
-        </a>
-        <a href="{% url 'favourites' %}" class="abort">
-            <span class="starp">★</span> Избранное
-        </a>
+        <nav>
+            <button id="theme-toggle" class="abort switchtheme">
+                Переключить тему
+            </button>
+            {% if user.is_authenticated %}
+                {{ username }}
+            {% else %}
+                <a href="{% url 'register' %}" class="account-option-btn">
+                    Войти
+                </a>
+                <a href="{% url 'login' %}" class="account-option-btn">
+                    Регистрация
+                </a>
+            {% endif%}
+            <a href="{% url 'favourites' %}" class="abort">
+                <span class="starp">★</span> Избранное
+            </a>
+        </nav>
         <h2>Рекомендуемые</h2>
         <div class="rec-item">
             <a class="rec-text" href="https://max.ru" target="_blank" rel="noopener noreferrer">
@@ -201,392 +207,5 @@
         </div>
     </aside>
 </div>
-
-<script>
-    const storageKey = 'favoritesDictionary';
-
-    function loadFavorites() {
-        try {
-            const saved = localStorage.getItem(storageKey);
-            if (saved) {
-                const parsed = JSON.parse(saved);
-                // Всегда возвращаем объект, даже если что-то пошло не так
-                return parsed && typeof parsed === 'object' ? parsed : {};
-            }
-        } catch (e) {
-            console.error('Ошибка загрузки избранного:', e);
-        }
-        return {};
-    }
-
-    function saveFavorites(dict) {
-        if (dict && typeof dict === 'object') {
-            localStorage.setItem(storageKey, JSON.stringify(dict));
-        }
-    }
-
-    // Загружаем и инициализируем
-    let favoritesDictionary = loadFavorites();
-    console.log('Загружено из localStorage:', favoritesDictionary);
-
-    // Если что-то не так, но НЕ перезаписываем если уже есть данные
-    if (!favoritesDictionary || typeof favoritesDictionary !== 'object') {
-        favoritesDictionary = {};
-        console.log('Инициализирован пустой словарь');
-    } else {
-        console.log('Словарь успешно загружен');
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        console.log('Восстановление кнопок. Ключи:', Object.keys(favoritesDictionary));
-
-        Object.keys(favoritesDictionary).forEach(item => {
-            const btn = document.querySelector(`[data-item-name="${item}"]`);
-            console.log(`Поиск кнопки для "${item}":`, btn);
-            if (btn) {
-                btn.setAttribute('aria-pressed', 'true');
-                btn.classList.add('active');
-                console.log(`Кнопка "${item}" восстановлена`);
-            }
-        });
-        console.log('Восстановлены избранные:', favoritesDictionary);
-    });
-
-    function toggleFavorite(btn) {
-        const itemName = btn.getAttribute('data-item-name');
-        const isPressed = btn.getAttribute('aria-pressed') === 'true';
-
-        console.log('Toggle:', itemName, 'было:', isPressed);
-
-        if (isPressed) {
-            delete favoritesDictionary[itemName];
-            btn.setAttribute('aria-pressed', 'false');
-            btn.classList.remove('active');
-            console.log('Удалено из избранного:', itemName);
-        } else {
-            favoritesDictionary[itemName] = 1;
-            btn.setAttribute('aria-pressed', 'true');
-            btn.classList.add('active');
-            console.log('Добавлено в избранное:', itemName);
-        }
-
-        console.log('Текущие избранные:', favoritesDictionary);
-        saveFavorites(favoritesDictionary);
-
-        // Проверка что сохранилось
-        setTimeout(() => {
-            const saved = localStorage.getItem(storageKey);
-            console.log('Проверка сохранения в localStorage:', saved);
-        }, 100);
-    }
-
-    function clearFavorites() {
-        Object.keys(favoritesDictionary).forEach(key => {
-            delete favoritesDictionary[key];
-        });
-        localStorage.removeItem(storageKey);
-        document.querySelectorAll('.favorite-btn[aria-pressed="true"]').forEach(btn => {
-            btn.setAttribute('aria-pressed', 'false');
-            btn.classList.remove('active');
-        });
-        console.log('Избранное очищено');
-        return true;
-    }
-
-    document.addEventListener('click', function (e) {
-        if (e.target.closest('.favorite-btn')) {
-            toggleFavorite(e.target.closest('.favorite-btn'));
-        }
-    });
-</script>
-<script>
-    const themeKey = 'site-theme';
-    const toggleBtn = document.getElementById('theme-toggle');
-
-    function applyTheme(theme) {
-        document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem(themeKey, theme);
-    }
-
-    function initTheme() {
-        const savedTheme = localStorage.getItem(themeKey);
-        if (savedTheme) {
-            applyTheme(savedTheme);
-        } else {
-            // По умолчанию — системная
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            applyTheme(prefersDark ? 'dark' : 'light');
-        }
-    }
-
-    if (toggleBtn) {
-        toggleBtn.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            applyTheme(current === 'dark' ? 'light' : 'dark');
-        });
-    }
-
-    initTheme();
-</script>
-<script>
-    const openBtn = document.getElementById('openFilters');
-    const closeBtn = document.getElementById('closeFilters');
-    const sheet = document.getElementById('filtersSheet');
-
-    function openSheet() {
-        sheet.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeSheet() {
-        sheet.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-
-    if (openBtn) openBtn.addEventListener('click', openSheet);
-    if (closeBtn) closeBtn.addEventListener('click', closeSheet);
-
-    // Закрытие по клику вне панели
-    sheet.addEventListener('click', (e) => {
-        if (e.target === sheet) {
-            closeSheet();
-        }
-    });
-</script>
-<script>
-    const sheetContent = document.querySelector('.filters-sheet-content');
-
-    let startY = 0;
-    let currentY = 0;
-    let isDragging = false;
-
-    const CLOSE_THRESHOLD = 120; // px — как у iOS
-
-    sheetContent.addEventListener('touchstart', (e) => {
-        if (!sheet.classList.contains('active')) return;
-
-        startY = e.touches[0].clientY;
-        isDragging = true;
-
-        sheetContent.style.transition = 'none';
-    });
-
-    sheetContent.addEventListener('touchmove', (e) => {
-        if (!isDragging) return;
-
-        currentY = e.touches[0].clientY;
-        const deltaY = currentY - startY;
-
-        // Двигаем ТОЛЬКО вниз
-        if (deltaY > 0) {
-            sheetContent.style.transform = `translateY(${deltaY}px)`;
-        }
-    });
-
-    sheetContent.addEventListener('touchend', () => {
-        if (!isDragging) return;
-        isDragging = false;
-
-        sheetContent.style.transition = 'transform 0.25s cubic-bezier(.4,0,.2,1)';
-
-        const deltaY = currentY - startY;
-
-        if (deltaY > CLOSE_THRESHOLD) {
-            closeSheet();
-        } else {
-            // Возврат обратно
-            sheetContent.style.transform = 'translateY(0)';
-        }
-
-        startY = 0;
-        currentY = 0;
-    });
-</script>
-<script>
-    const applyBtn = document.getElementById('applyFilters');
-    const resetBtn = document.getElementById('resetFilters');
-
-    // Применить фильтры
-    if (applyBtn) {
-        applyBtn.addEventListener('click', () => {
-            // Здесь фильтры УЖЕ выбраны (radio / checkbox)
-            // Можно отправить форму или обновить результаты
-
-            closeSheet(); // iOS-style автозакрытие
-        });
-    }
-
-    // Сбросить фильтры
-    if (resetBtn) {
-        resetBtn.addEventListener('click', () => {
-            const inputs = document.querySelectorAll(
-                '.filters-sheet input[type="radio"], .filters-sheet input[type="checkbox"]'
-            );
-
-            inputs.forEach(input => {
-                input.checked = false;
-            });
-        });
-    }
-</script>
-<script>
-    const mobileThemeBtn = document.getElementById('mobileThemeToggle');
-
-    if (mobileThemeBtn) {
-        mobileThemeBtn.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            applyTheme(current === 'dark' ? 'light' : 'dark');
-        });
-    }
-</script>
-<script>
-    const accountSheet = document.getElementById('accountSheet');
-    const mobileLoginBtn = document.getElementById('mobileLoginBtn');
-    const closeAccountBtn = document.getElementById('closeAccountSheet');
-
-    function openAccountSheet() {
-        if (accountSheet) {
-            accountSheet.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-    }
-
-    function closeAccountSheetFunc() {
-        if (accountSheet) {
-            accountSheet.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-    }
-
-    // Кнопка Войти
-    if (mobileLoginBtn) {
-        mobileLoginBtn.addEventListener('click', (e) => {
-            e.preventDefault(); // отменяем переход, если это <a>
-            openAccountSheet();
-        });
-    }
-
-    // Закрытие
-    if (closeAccountBtn) closeAccountBtn.addEventListener('click', closeAccountSheetFunc);
-
-    // Закрытие по клику вне панели
-    if (accountSheet) {
-        accountSheet.addEventListener('click', e => {
-            if (e.target === accountSheet) closeAccountSheetFunc();
-        });
-    }
-</script>
-<script>
-    const mobileSheet = document.getElementById('mobileSheet');
-    const sheetTitle = document.getElementById('sheetTitle');
-    const sheetBody = document.getElementById('sheetBody');
-    const closeMobileSheet = document.getElementById('closeMobileSheet');
-    // Контент для фильтров
-    const filtersContent = `
-    <div class="filter-group">
-        <div class="filter-block">
-            <span class="filter-title">Назначение</span>
-            <label><input type="radio" name="purpose"> Рабочие приложения</label>
-            <label><input type="radio" name="purpose"> Развлечение</label>
-            <label><input type="radio" name="purpose"> Медиа</label>
-            <label><input type="radio" name="purpose"> Утилиты</label>
-            <label><input type="radio" name="purpose"> Образование</label>
-        </div>
-        <div class="filter-block">
-            <span class="filter-title">Цена</span>
-            <label><input type="radio" name="price"> Бесплатные</label>
-            <label><input type="radio" name="price"> Платные</label>
-        </div>
-        <div class="filter-block">
-            <span class="filter-title">Устройство</span>
-            <label><input type="radio" name="device"> Windows</label>
-            <label><input type="radio" name="device"> macOS</label>
-        </div>
-        <div class="filter-block">
-            <span class="filter-title">Доступ</span>
-            <label><input type="radio" name="access"> Desktop</label>
-            <label><input type="radio" name="access"> Web</label>
-            <label><input type="radio" name="access"> Mobile</label>
-        </div>
-    </div>
-`;
-
-    // Контент для аккаунта
-    const accountContent = `
-    <a href="{% url 'login' %}" class="sheet-btn">Войти</a>
-    <a href="{% url 'register' %}" class="sheet-btn">Регистрация</a>
-`;
-
-    // Открытие
-    function openSheet(type) {
-        if (type === 'filters') {
-            sheetTitle.textContent = 'Фильтры';
-            sheetBody.innerHTML = filtersContent;
-        } else if (type === 'account') {
-            sheetTitle.textContent = 'Вход';
-            sheetBody.innerHTML = accountContent;
-        }
-        mobileSheet.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
-
-    // Закрытие
-    function closeSheet() {
-        mobileSheet.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-
-    closeMobileSheet.addEventListener('click', closeSheet);
-    mobileSheet.addEventListener('click', e => {
-        if (e.target === mobileSheet) closeSheet();
-    });
-
-
-    sheetContent.addEventListener('touchstart', e => {
-        startY = e.touches[0].clientY;
-        isDragging = true;
-        sheetContent.style.transition = 'none';
-    });
-    sheetContent.addEventListener('touchmove', e => {
-        if (!isDragging) return;
-        currentY = e.touches[0].clientY;
-        let deltaY = currentY - startY;
-        if (deltaY > 0) sheetContent.style.transform = `translateY(${deltaY}px)`;
-    });
-    sheetContent.addEventListener('touchend', () => {
-        isDragging = false;
-        sheetContent.style.transition = 'transform 0.25s cubic-bezier(.4,0,.2,1)';
-        let deltaY = currentY - startY;
-        if (deltaY > CLOSE_THRESHOLD) closeSheet();
-        else sheetContent.style.transform = 'translateY(0)';
-    });
-    document.querySelectorAll('.output').forEach((el, index) => {
-        setTimeout(() => el.classList.add('show'), index * 100);
-    });
-    const labels = document.querySelectorAll('.filter-block label');
-
-    labels.forEach(label => {
-        const input = label.querySelector('input');
-        input.addEventListener('change', () => {
-            // Сбрасываем у всех
-            labels.forEach(l => l.classList.remove('active'));
-            if (input.checked) {
-                label.classList.add('active');
-            }
-        });
-    });
-    document.querySelectorAll('.filter-block label').forEach(label => {
-        const input = label.querySelector('input');
-        input.addEventListener('change', () => {
-            // Сбрасываем active у всех label в этой группе
-            const group = label.parentElement;
-            group.querySelectorAll('label').forEach(l => l.classList.remove('active'));
-
-            // Добавляем active выбранному
-            if (input.checked) label.classList.add('active');
-        });
-    });
-
-</script>
 
 {% endblock %}

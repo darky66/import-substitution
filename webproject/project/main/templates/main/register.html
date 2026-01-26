@@ -30,27 +30,5 @@
         </div>
     </form>
 </div>
-<script>
-const themeKey = 'site-theme';
-
-function applyTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-}
-
-// Инициализация темы при загрузке страницы
-function initTheme() {
-    const savedTheme = localStorage.getItem(themeKey);
-    if(savedTheme) {
-        applyTheme(savedTheme);
-    } else {
-        // Если темы нет — используем системную
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        applyTheme(prefersDark ? 'dark' : 'light');
-    }
-}
-
-// Запускаем
-initTheme();
-</script>
 
 {% endblock %}

@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 @requires_csrf_token
 def main_page(request):
     description = {}
+    user = request.user
     if request.method == 'POST':
             form = ContactForm(request.POST)
             request_result = request.POST.get('name').lower()
@@ -38,9 +39,16 @@ def main_page(request):
                         result_with_descriptions.append((name, description.get(name, '')))
                     else:
                         result_with_descriptions.append(('К сожалению, мы не можем найти похожие приложения', ''))
-                return render(request, 'main/main_page.html', {'items': result_with_descriptions})
+                context = {
+                    'items': result_with_descriptions,
+                    'username': user.username
+                }
+                return render(request, 'main/main_page.html', context)
             else:
-                return render(request, 'main/main_page.html', { 'result': result })
+                context = {
+                    'result': result
+                }
+                return render(request, 'main/main_page.html', context)
     else:
         form = ContactForm()
     return render(request, 'main/main_page.html')
@@ -48,6 +56,7 @@ def main_page(request):
 @requires_csrf_token
 @login_required
 def favourites(request):
+    print(dict_fav)
     return render(request, 'main/favourites.html', {'dict': dict_fav})
 @requires_csrf_token
 def register_view(request):
@@ -78,7 +87,7 @@ def login_view(request):
 def logout_page(request):
     logout(request)
     messages.success(request, 'Вы успешно вышли из системы')
-    return redirect('login')
+    return redirect('main')
 
 def error_404(request, exception):
     return render(request, 'main/error_404.html', status=404)
