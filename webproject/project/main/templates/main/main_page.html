@@ -5,7 +5,6 @@
 {% block content %}
 <div class="container">
     <aside class="sidebar desktop-sidebar">
-
         <h2 class="filters">Фильтры</h2>
         <div class="filter-group">
             <div class="filter-block">
@@ -117,15 +116,11 @@
                 </svg>
                 <span>Аккаунт</span>
         </div>
-
-
         <form method="POST">
             {% csrf_token %}
             <input class="search" name="name" type="text" placeholder="Найти приложение...">
         </form>
-
         <h1>Результаты поиска</h1>
-
         <div id="output">
             {% for name, desc in items %}
             {% if name != 'К сожалению, мы не можем найти похожие приложения' %}
@@ -133,15 +128,15 @@
                 <div>
                     <h2>{{ name }}</h2>
                     {% for i in desc %}
-                        {% if 'http' not in i and i != '-' %}
-                            <h3>{{ i }}</h3>
-                        {% endif %}
-                        {% if 'http' in i %}
-                            <a href="{{ i }}" target="_blank" rel="noopener noreferrer">{{ i }}</a>
-                        {% endif %}
-                        {% if i == '-' %}
-                            <br>
-                        {% endif %}
+                    {% if 'http' not in i and i != '-' %}
+                    <h3>{{ i }}</h3>
+                    {% endif %}
+                    {% if 'http' in i %}
+                    <a href="{{ i }}" target="_blank" rel="noopener noreferrer">{{ i }}</a>
+                    {% endif %}
+                    {% if i == '-' %}
+                    <br>
+                    {% endif %}
                     {% endfor %}
                 </div>
                 <button class="favorite-btn" data-item-name="{{ name }}" aria-label="Добавить в избранное"
@@ -156,22 +151,25 @@
             {% endfor %}
         </div>
     </main>
-
-    <!-- RECOMMENDATIONS -->
     <aside class="recommendations">
         <nav>
             <button id="theme-toggle" class="abort switchtheme">
                 Переключить тему
             </button>
             {% if user.is_authenticated %}
-                {{ username }}
+            <div class="usernamediv">
+                <span class="usernametxt">{{ username }}</span>
+                <a href="{% url 'logout' %}" class="logoutbtn">
+                    Выйти
+                </a>
+            </div>
             {% else %}
-                <a href="{% url 'register' %}" class="account-option-btn">
-                    Войти
-                </a>
-                <a href="{% url 'login' %}" class="account-option-btn">
-                    Регистрация
-                </a>
+            <a href="{% url 'register' %}" class="abort">
+                Войти
+            </a>
+            <a href="{% url 'login' %}" class="abort">
+                Регистрация
+            </a>
             {% endif%}
             <a href="{% url 'favourites' %}" class="abort">
                 <span class="starp">★</span> Избранное

@@ -6,9 +6,7 @@
 <div class="auth-container">
     <form method="POST" class="auth-form">
         {% csrf_token %}
-
         <h1 class="auth-title">Создать аккаунт</h1>
-
         {% for field in form %}
         <div class="auth-field">
             <label for="{{ field.id_for_label }}" class="auth-label">
@@ -22,11 +20,10 @@
             {% endif %}
         </div>
         {% endfor %}
-
         <button type="submit" class="auth-btn">Регистрация</button>
-
         <div class="links-section">
-            <p>Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a></p>
+            <p>Уже есть аккаунт? <a href="{% url 'register' %}">Войти</a></p>
+            <a href="{% url 'main' %}">← Назад на главную</a>
         </div>
     </form>
 </div>

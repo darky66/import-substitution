@@ -1,11 +1,11 @@
 {% extends "main/layout.html" %}
 {% load static %}
 {% block title %}Избранное{% endblock %}
-{% block script%}<script src="{% static 'js/favourites.js' %}" defer></script>{% endblock %}
+{% block script%}
+<script src="{% static 'js/favourites.js' %}" defer></script>{% endblock %}
 {% block content %}
 <div class="container">
     <aside class="sidebar desktop-sidebar">
-
         <h2 class="filters">Фильтры</h2>
         <div class="filter-group">
             <div class="filter-block">
@@ -96,8 +96,6 @@
             </aside>
         </div>
     </div>
-
-    <!-- MAIN CONTENT -->
     <main class="main">
         <div class="mobile-actions full-width-actions">
             <button class="mobile-action-btn full-width-btn" id="mobileThemeToggle" aria-label="Сменить тему">
@@ -121,22 +119,29 @@
         </div>
         <h1>Мои избранные приложения</h1>
         <div id="output"></div>
-
     </main>
-
     <aside class="recommendations">
-        <button id="theme-toggle" class="abort switchtheme">
-            Переключить тему
-        </button>
-        <a href="{% url 'register' %}" class="abort account-button">
-            Войти
-        </a>
-        <a href="{% url 'login' %}" class="abort account-button">
-            Регистрация
-        </a>
-        <a href="{% url 'main' %}" class="abort">
-            ← Назад на главную
-        </a>
+        <nav>
+            <button id="theme-toggle" class="abort switchtheme">
+                Переключить тему
+            </button>
+            {% if user.is_authenticated %}
+            {{ username }}
+            <a href="{% url 'logout' %}" class="abort">
+                Выйти
+            </a>
+            {% else %}
+            <a href="{% url 'register' %}" class="abort">
+                Войти
+            </a>
+            <a href="{% url 'login' %}" class="abort">
+                Регистрация
+            </a>
+            {% endif%}
+            <a href="{% url 'main' %}" class="abort">
+                ← Назад на главную
+            </a>
+        </nav>
         <h2>Рекомендуемые</h2>
         <div class="rec-item">
             <a class="rec-text" href="https://max.ru" target="_blank" rel="noopener noreferrer">

@@ -5,7 +5,6 @@
 {% block content %}
 <form method="post">
     {% csrf_token %}
-    
     {% for field in form %}
         <div class="mb-3">
             <label for="{{ field.id_for_label }}">
