@@ -21,6 +21,11 @@
             <a href="{% url 'main' %}">← Назад на главную</a>
         </div>
     </form>
+    {% if user.is_authenticated %}
+    <script>
+        localStorage.setItem('justLoggedIn', 'true');
+    </script>
+    {% endif %}
 </div>
 
 {% endblock %}

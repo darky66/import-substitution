@@ -11,6 +11,10 @@ from django.contrib.auth.decorators import login_required
 def main_page(request):
     description = {}
     user = request.user
+    context = {
+        'username': user.username if user.is_authenticated else None,
+        'user': user 
+    }
     if request.method == 'POST':
             form = ContactForm(request.POST)
             request_result = request.POST.get('name').lower()
@@ -51,7 +55,7 @@ def main_page(request):
                 return render(request, 'main/main_page.html', context)
     else:
         form = ContactForm()
-    return render(request, 'main/main_page.html')
+    return render(request, 'main/main_page.html', context)
 
 @requires_csrf_token
 @login_required

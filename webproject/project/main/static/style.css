@@ -1069,3 +1069,33 @@ button:active,
     display: inline-block;
     margin-right: 12px;
 }
+
+.auth-toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--bg-card);
+    color: var(--text-main);
+    padding: 14px 20px;
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    font-size: 14px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 2000;
+}
+
+.auth-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.auth-toast.success {
+    border: 1px solid rgba(0, 200, 83, 0.4);
+}
+
+.auth-toast.warning {
+    border: 1px solid rgba(255, 193, 7, 0.4);
+}

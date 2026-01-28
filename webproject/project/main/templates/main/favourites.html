@@ -127,7 +127,7 @@
             </button>
             {% if user.is_authenticated %}
             {{ username }}
-            <a href="{% url 'logout' %}" class="abort">
+            <a href="{% url 'logout' %}" class="abort" id="logoutBtn">
                 Выйти
             </a>
             {% else %}

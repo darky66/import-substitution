@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,10 +9,20 @@
     <title>{% block title %}App Finder{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
     <script src="{% static 'js/main.js' %}" defer></script>
+    <script src="{% static 'js/sheet.js' %}"></script>
+    <script src="{% static 'js/theme.js' %}"></script>
     {% block script %} {% endblock %}
 </head>
-<body>
+
+<body data-auth="{{ user.is_authenticated|yesno:'true,false' }}">
+
     {% block content %}
+
     {% endblock %}
+    <div id="auth-toast" class="auth-toast">
+        Чтобы добавить в избранное, войдите в аккаунт
+    </div>
+
 </body>
+
 </html>

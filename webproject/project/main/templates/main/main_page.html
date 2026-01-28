@@ -159,7 +159,7 @@
             {% if user.is_authenticated %}
             <div class="usernamediv">
                 <span class="usernametxt">{{ username }}</span>
-                <a href="{% url 'logout' %}" class="logoutbtn">
+                <a href="{% url 'logout' %}" class="logoutbtn" id="logoutBtn">
                     Выйти
                 </a>
             </div>
@@ -205,5 +205,4 @@
         </div>
     </aside>
 </div>
-
 {% endblock %}
